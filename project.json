@@ -1,0 +1,25 @@
+{
+  "version": "1.0.1-*",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+      "Newtonsoft.Json": "9.0.1"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    },
+    "net461": {
+        "dependencies": {
+            "System.Net.Http": "4.0.10.0",
+            "System.Threading.Tasks": "4.0.10.0",
+            "System.Text.Encoding": "4.0.10.0",
+            "System.Runtime": "4.0.20.0",
+            "System.Net.Primitives" : "4.0.10.0"
+        }
+    }
+  }
+}
