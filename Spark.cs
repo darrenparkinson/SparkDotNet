@@ -69,7 +69,6 @@ namespace SparkDotNet
             uriBuilder.Path = path;
             string queryString = "";
             if (dict.Count > 0) {
-                queryString += "?";
                 foreach (KeyValuePair<string, string> kv in dict)
                 {
                     queryString += UrlEncode(kv.Key);
