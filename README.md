@@ -105,6 +105,7 @@ namespace ConsoleApplication
         static async Task RunAsync()
         {
             var token = System.Environment.GetEnvironmentVariable("SPARK_TOKEN");
+            var spark = new Spark(token);
             var orgs = await spark.GetOrganizationsAsync();
             foreach (var org in orgs)
             {

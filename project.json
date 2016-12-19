@@ -23,11 +23,7 @@
     },
     "net45": {
         "dependencies": {
-            "System.Net.Http": "4.0.0",
-            "System.Threading.Tasks": "4.0.10.0",
-            "System.Text.Encoding": "4.0.10.0",
-            "System.Runtime": "4.0.20.0",
-            "System.Net.Primitives" : "4.0.10.0"
+             "System.Net.Http": "4.0.0"
         }
     }
   }
