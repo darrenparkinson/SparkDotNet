@@ -18,7 +18,7 @@ namespace SparkDotNet
         private string accessToken { get; set; }
         private static string baseURL = "https://api.ciscospark.com";
 
-        private static HttpClient client = new HttpClient();
+        private HttpClient client = new HttpClient();
 
         public Spark(string accessToken)
         {
