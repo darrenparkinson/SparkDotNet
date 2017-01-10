@@ -16,6 +16,9 @@ namespace SparkDotNet {
         public DateTime created { get; set; }
         public string timeZone { get; set; }
         public string status { get; set; }
+        public DateTime lastActivity {get; set;}
+        public string type {get; set;}
+        public string nickName {get; set;}
 
 
         public override string ToString() {
