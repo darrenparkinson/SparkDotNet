@@ -18,7 +18,7 @@ foreach (var room in rooms)
 
 ## Prerequisites
 
-This library requires either .NET 4.6.1 or .NET Standard 1.6.
+This library requires .NET 4.5, .NET 4.6.1 or .NET Standard 1.6.
 
 It can be used across multiple platforms using .NET Core and you will therefore require the appropriate components based on your choice of environment.
 
@@ -27,7 +27,7 @@ It can be used across multiple platforms using .NET Core and you will therefore 
 * [.NET Core for Mac](https://www.microsoft.com/net/core#macos)
 * [.NET Core for Linux](https://www.microsoft.com/net/core#linuxredhat)
 
-You can also use Visual Studio 2015 and .NET 4.6.1.
+You can also use Visual Studio 2015 and .NET 4.6.1 or .Net 4.5.
 
 The following assumes you have an existing project to which you wish to add the library.
 
@@ -49,7 +49,7 @@ The following shows an example project.json file:
     "emitEntryPoint": true
   },
   "dependencies": {
-      "SparkDotNet": "1.0.1"
+      "SparkDotNet": "1.0.4"
   },
   "frameworks": {
     "netcoreapp1.0": {
@@ -164,3 +164,28 @@ spark.UpdatePersonAsync(id,new string[] {"someone@example.com"},orgId, new strin
 
 Most methods return an object of the type you are retrieving or updating.  Methods where you expect multiple objects are returned as a List<> of that object.  The exception to this is when deleting an object where the returned value is a boolean indicating the success of the operation.
 
+# Pagination
+
+An initial version of pagination has been added to provide support for Cisco Spark API as outlined on [the Cisco Spark Developer Portal](https://developer.ciscospark.com/pagination.html).  
+
+For backwards compatibility, this has been added as a separate method (`GetItemsWithLinksAsync`) which you must use over and above those specific to each resource if you specifically want to use pagination.  
+
+This method returns a new `PaginationResult` class which contains the `Items` of the type you requested and `Links` to any additional resources for `First`, `Prev` and `Next`.
+
+The following provides an example of returning `Person` items with pagination:
+
+```{.cs}
+var result = await spark.GetItemsWithLinksAsync<SparkDotNet.Person>("/v1/people?max=3");
+foreach (var person in result.Items)
+{
+    WriteLine(person);
+}
+if (!string.IsNullOrEmpty(result.Links.Next))
+{
+    var result2 = await spark.GetItemsWithLinksAsync<SparkDotNet.Person>(result.Links.Next);
+    foreach (var person in result2.Items)
+    {
+        WriteLine(person);
+    }
+}
+```
