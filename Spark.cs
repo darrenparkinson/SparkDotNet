@@ -58,13 +58,10 @@ namespace SparkDotNet
             if (response.IsSuccessStatusCode)
             {
                 returnItem = DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-
             }
             else
             {
-                //TODO: Throw Exception or error if we get one.
-                //throw new System.Exception($"Received Status Code: {response.StatusCode.ToString()}");
-
+                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
 
@@ -100,7 +97,7 @@ namespace SparkDotNet
             }
             else
             {
-
+                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
         }
@@ -111,13 +108,10 @@ namespace SparkDotNet
             if (response.IsSuccessStatusCode)
             {
                 returnItem = DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-
             }
             else
             {
-                //TODO: Throw Exception or error if we get one.
-                //throw new System.Exception($"Received Status Code: {response.StatusCode.ToString()}");
-
+                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
         }
@@ -138,9 +132,7 @@ namespace SparkDotNet
             }
             else
             {
-                //TODO: Throw Exception or error if we get one.
-                //throw new System.Exception($"Received Status Code: {response.StatusCode.ToString()}");
-
+                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
 
             return items;
@@ -195,12 +187,9 @@ namespace SparkDotNet
             }
             else
             {
-                //TODO: Throw Exception or error if we get one.
-                //throw new System.Exception($"Received Status Code: {response.StatusCode.ToString()}");
-
+                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
 
-            //return new Tuple<List<T>, Links>(items, links);
             return paginationResult;
         }
 

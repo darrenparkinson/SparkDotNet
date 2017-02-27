@@ -1,6 +1,6 @@
 # SparkDotNet
 
-An unofficial dotnet library for consuming RESTful APIs for Cisco Spark. Please visit us at http://developer.ciscospark.com/.
+An unofficial dotnet library for consuming RESTful APIs for Cisco Spark. Please visit Cisco at http://developer.ciscospark.com/.
 
 ```{.cs}
 using SparkDotNet;
@@ -106,13 +106,21 @@ namespace ConsoleApplication
         {
             var token = System.Environment.GetEnvironmentVariable("SPARK_TOKEN");
             var spark = new Spark(token);
-            var orgs = await spark.GetOrganizationsAsync();
-            foreach (var org in orgs)
-            {
-                WriteLine(org);
-            }
 
-            WriteLine(await spark.GetMeAsync());
+            try
+            {
+                var orgs = await spark.GetOrganizationsAsync();
+                foreach (var org in orgs)
+                {
+                    WriteLine(org);
+                }
+
+                WriteLine(await spark.GetMeAsync());
+            }
+            catch (SparkException ex)
+            {
+                WriteLine(ex.Message);
+            }
         }
     }
 }
@@ -187,5 +195,43 @@ if (!string.IsNullOrEmpty(result.Links.Next))
     {
         WriteLine(person);
     }
+}
+```
+
+# Exceptions
+
+As of version 1.1.0, all calls to the Cisco Spark platform will throw a `SparkException` if an unexpected result is received. 
+
+To avoid runtime errors, wrap calls to Cisco Spark in a `try-catch` statement:
+
+```{.cs}
+try
+{
+    WriteLine(await spark.GetMeAsync());    
+}
+catch (SparkException ex)
+{
+    WriteLine(ex.Message)
+}
+```
+
+`SparkException` provides the following properties:
+
+* `Message` (`string`)
+* `StatusCode` : (`int`)
+* `Headers` : (`System.Net.Http.Headers.HttpResponseHeaders`)
+
+The `Headers` property is useful since this will provide the Cisco `Trackingid` for troubleshooting purposes.
+
+```{.cs}
+using System.Linq;
+
+try
+{
+    WriteLine(await spark.GetMeAsync());    
+}
+catch (SparkException ex)
+{
+    WriteLine(ex.Headers.GetValues("Trackingid").FirstOrDefault());
 }
 ```
