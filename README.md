@@ -33,13 +33,27 @@ The following assumes you have an existing project to which you wish to add the 
 
 ### .NET Core
 
-1. Edit your `project.json` file to include `SparkDotNet` as a dependency.  
+1. Edit your `<application>.csproj` file to include `SparkDotNet` as a dependency.  
 
 2. Run `dotnet restore`.
 
 3. There is no step 3.
 
-The following shows an example project.json file:
+The following shows an example application.csproj file:
+
+```{.csproj}
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="SparkDotNet" Version="1.2.0" />
+  </ItemGroup>
+</Project>
+```
+
+For previous versions of dotnet core, the following shows an example project.json file:
 
 ```{.json}
 {
@@ -80,10 +94,11 @@ The following shows an example project.json file:
 
 1. Create a new project 
 
-> `dotnet new`
+> `dotnet new console`
 
-2. Edit the `project.json` file as above to include the `SparkDotNet` dependency
+2. Include the `SparkDotNet` dependency  
 
+> `dotnet add package SparkDotNet`  
 > `dotnet restore`
 
 3. Edit `Program.cs` to resemble the following:
@@ -128,6 +143,7 @@ namespace ConsoleApplication
 ```
 4. Run the Program
 
+> `set SPARK_TOKEN=<your token here`  
 > `dotnet run`
 
 # Reference
@@ -171,6 +187,23 @@ spark.UpdatePersonAsync(id,new string[] {"someone@example.com"},orgId, new strin
 ```
 
 Most methods return an object of the type you are retrieving or updating.  Methods where you expect multiple objects are returned as a List<> of that object.  The exception to this is when deleting an object where the returned value is a boolean indicating the success of the operation.
+
+# Files
+
+As of version 1.2.0, when posting files in messages using `CreateMessageAsync()` you now have the option of sending local files.
+
+You could already send files available publicly using the existing `files` object:
+
+`var message = await spark.CreateMessageAsync(roomId, text:"Here is the logo you wanted.", files:new string[] {"https://developer.cisco.com/images/mobility/Spark.png"} );`
+
+To upload a local file, you simple replace the URI with a local filename:
+
+`var message = await spark.CreateMessageAsync(roomId, text:"Here is the logo you wanted.", files:new string[] {"Spark.png"} );`
+
+This example assumes the `Spark.png` file is in the same location you are running the application. 
+
+Note that you can only send a single file at a time using this method, even though the parameter accepts a string array.
+
 
 # Pagination
 

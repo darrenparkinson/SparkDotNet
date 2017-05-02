@@ -11,6 +11,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace SparkDotNet
 {
@@ -52,8 +53,32 @@ namespace SparkDotNet
         private async Task<T> PostItemAsync<T>(string path, Dictionary<string, object> bodyParams)
         {
             T returnItem = (T)System.Activator.CreateInstance(typeof(T));
-            var jsonBody = JsonConvert.SerializeObject(bodyParams);
-            StringContent content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            HttpContent content;
+
+            if (bodyParams.ContainsKey("files") && IsLocalPath(bodyParams["files"])) {
+                MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----SparkDotNetBoundary");
+                string[] filelist = (string[])bodyParams["files"];
+                bodyParams.Remove("files");
+                foreach (KeyValuePair<string,object> kv in bodyParams) 
+                {
+                    StringContent stringContent = new StringContent((string)kv.Value);
+                    multiPartContent.Add(stringContent, kv.Key);
+                }
+                foreach (string file in filelist) {
+                    FileInfo fi = new FileInfo(file);
+                    string fileName = fi.Name;
+                    byte[] fileContents = File.ReadAllBytes(fi.FullName);
+                    ByteArrayContent byteArrayContent = new ByteArrayContent(fileContents);
+                    byteArrayContent.Headers.Add("Content-Type", MimeTypes.GetMimeType(fileName));
+                    multiPartContent.Add(byteArrayContent, "files", fileName);
+                }
+                content = multiPartContent;
+            } else {
+                var jsonBody = JsonConvert.SerializeObject(bodyParams);
+                content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            }
+
             HttpResponseMessage response = await client.PostAsync(path, content);
             if (response.IsSuccessStatusCode)
             {
@@ -137,6 +162,19 @@ namespace SparkDotNet
 
             return items;
         }
+        
+        private static bool IsLocalPath(object files)
+        {
+            string[] filelist = (string[])files;
+            var p = filelist[0];
+            try {
+                return new System.Uri(p).IsFile;
+            }
+            catch (Exception ex) {
+                return true; // assume it's a local file if we can't create a URI out of it...
+            }
+        }
+        #endregion
 
         public async Task<PaginationResult<T>> GetItemsWithLinksAsync<T>(string path)
         {
@@ -193,7 +231,7 @@ namespace SparkDotNet
             return paginationResult;
         }
 
-        #endregion
+
 
     }
 }
