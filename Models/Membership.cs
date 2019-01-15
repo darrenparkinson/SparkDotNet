@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SparkDotNet {
+namespace SparkDotNet
+{
 
     public class Membership
     {
@@ -10,11 +11,13 @@ namespace SparkDotNet {
         public string personId { get; set; }
         public string personEmail { get; set; }
         public string personDisplayName { get; set; }
+        public string personOrgId { get; set; }
         public bool isModerator { get; set; }
         public bool isMonitor { get; set; }
         public DateTime created { get; set; }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return JsonConvert.SerializeObject(this);
         }
     }

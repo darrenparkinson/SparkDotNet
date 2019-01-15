@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SparkDotNet {
+namespace SparkDotNet
+{
     public class Message
     {
         public string id { get; set; }
@@ -17,12 +18,14 @@ namespace SparkDotNet {
         public string html { get; set; }
         public DateTime created { get; set; }
         public string[] mentionedPeople { get; set; }
+        public string[] mentionedGroups { get; set; }
 
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return JsonConvert.SerializeObject(this);
         }
     }
 
- 
+
 }
