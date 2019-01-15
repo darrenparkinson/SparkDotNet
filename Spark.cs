@@ -56,16 +56,18 @@ namespace SparkDotNet
 
             HttpContent content;
 
-            if (bodyParams.ContainsKey("files") && IsLocalPath(bodyParams["files"])) {
+            if (bodyParams.ContainsKey("files") && IsLocalPath(bodyParams["files"]))
+            {
                 MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----SparkDotNetBoundary");
                 string[] filelist = (string[])bodyParams["files"];
                 bodyParams.Remove("files");
-                foreach (KeyValuePair<string,object> kv in bodyParams) 
+                foreach (KeyValuePair<string, object> kv in bodyParams)
                 {
                     StringContent stringContent = new StringContent((string)kv.Value);
                     multiPartContent.Add(stringContent, kv.Key);
                 }
-                foreach (string file in filelist) {
+                foreach (string file in filelist)
+                {
                     FileInfo fi = new FileInfo(file);
                     string fileName = fi.Name;
                     byte[] fileContents = File.ReadAllBytes(fi.FullName);
@@ -74,7 +76,9 @@ namespace SparkDotNet
                     multiPartContent.Add(byteArrayContent, "files", fileName);
                 }
                 content = multiPartContent;
-            } else {
+            }
+            else
+            {
                 var jsonBody = JsonConvert.SerializeObject(bodyParams);
                 content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             }
@@ -86,7 +90,7 @@ namespace SparkDotNet
             }
             else
             {
-                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
 
@@ -122,7 +126,7 @@ namespace SparkDotNet
             }
             else
             {
-                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
         }
@@ -136,7 +140,7 @@ namespace SparkDotNet
             }
             else
             {
-                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
             return returnItem;
         }
@@ -157,20 +161,22 @@ namespace SparkDotNet
             }
             else
             {
-                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
 
             return items;
         }
-        
+
         private static bool IsLocalPath(object files)
         {
             string[] filelist = (string[])files;
             var p = filelist[0];
-            try {
+            try
+            {
                 return new System.Uri(p).IsFile;
             }
-            catch (Exception ex) {
+            catch (Exception)
+            {
                 return true; // assume it's a local file if we can't create a URI out of it...
             }
         }
@@ -194,7 +200,8 @@ namespace SparkDotNet
                 if (response.Headers.Contains("Link"))
                 {
                     var link = response.Headers.GetValues("Link").FirstOrDefault();
-                    if (link != null && !"".Equals(link)) {
+                    if (link != null && !"".Equals(link))
+                    {
                         // borrowed regex from spark-java-sdk https://github.com/ciscospark/spark-java-sdk/blob/master/src/main/java/com/ciscospark/LinkedResponse.java
                         Regex r = new Regex("\\s*<(\\S+)>\\s*;\\s*rel=\"(\\S+)\",?", RegexOptions.Compiled);
                         MatchCollection regmatch = r.Matches(link);
@@ -202,20 +209,20 @@ namespace SparkDotNet
                         {
                             var linktype = item.Groups[2].ToString().ToLower();
                             Uri linkUrl = new Uri(item.Groups[1].ToString());
-                            
+
                             switch (linktype)
                             {
                                 case "next":
-                                links.Next = linkUrl.PathAndQuery;
-                                break;
+                                    links.Next = linkUrl.PathAndQuery;
+                                    break;
                                 case "prev":
-                                links.Prev = linkUrl.PathAndQuery;
-                                break;
+                                    links.Prev = linkUrl.PathAndQuery;
+                                    break;
                                 case "first":
-                                links.First = linkUrl.PathAndQuery;
-                                break;
+                                    links.First = linkUrl.PathAndQuery;
+                                    break;
                                 default:
-                                break;
+                                    break;
                             }
                         }
                     }
@@ -225,7 +232,7 @@ namespace SparkDotNet
             }
             else
             {
-                throw new SparkException((int)response.StatusCode,$"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
             }
 
             return paginationResult;

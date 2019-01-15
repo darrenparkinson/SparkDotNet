@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SparkDotNet {
+namespace SparkDotNet
+{
     public class Room
     {
         public string id { get; set; }
@@ -12,8 +13,10 @@ namespace SparkDotNet {
         public DateTime lastActivity { get; set; }
         public string type { get; set; }
         public string creatorId { get; set; }
-        
-       public override string ToString() {
+        public string sipAddress { get; set; }
+
+        public override string ToString()
+        {
             return JsonConvert.SerializeObject(this);
         }
     }

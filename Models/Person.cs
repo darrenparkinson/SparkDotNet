@@ -1,7 +1,8 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SparkDotNet {
+namespace SparkDotNet
+{
     public class Person
     {
         public string id { get; set; }
@@ -16,15 +17,16 @@ namespace SparkDotNet {
         public DateTime created { get; set; }
         public string timeZone { get; set; }
         public string status { get; set; }
-        public DateTime lastActivity {get; set;}
-        public string type {get; set;}
-        public string nickName {get; set;}
+        public DateTime lastActivity { get; set; }
+        public string type { get; set; }
+        public string nickName { get; set; }
 
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return JsonConvert.SerializeObject(this);
         }
     }
 
-    
+
 }
