@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <VersionPrefix>1.2.2</VersionPrefix>
+    <VersionPrefix>1.2.4</VersionPrefix>
     <TargetFrameworks>netstandard1.6;net461;net45</TargetFrameworks>
     <DebugType>portable</DebugType>
     <AssemblyName>SparkDotNet</AssemblyName>
     <PackageId>SparkDotNet</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.6' ">1.6.0</NetStandardImplicitPackageVersion>
     <PackageLicenseUrl>https://github.com/darrenparkinson/SparkDotNet/blob/master/LICENSE</PackageLicenseUrl>
-    <NuspecFile>SparkDotNet.nuspec</NuspecFile>
+    <Description>An unofficial dotnet library for consuming RESTful APIs for Cisco Spark (now Webex Teams). Please visit Cisco at https://developer.webex.com.</Description>
+    <Version>1.2.4</Version>
+    <Authors>Darren Parkinson</Authors>
+    <PackageProjectUrl>https://github.com/darrenparkinson/SparkDotNet</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
