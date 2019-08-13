@@ -42,6 +42,19 @@ namespace SparkDotNet
         }
 
         /// <summary>
+        /// Shows Webex meeting details for a room such as the SIP address, meeting URL, toll-free and toll dial-in numbers.
+        /// Specify the room ID in the roomId parameter in the URI.
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <returns>MeetingDetails object.</returns>
+        public async Task<MeetingDetails> GetRoomMeetingDetailsAsync(string roomId)
+        {
+            var queryParams = new Dictionary<string, string>();
+            var path = getURL($"{roomsBase}/{roomId}/meetingInfo", queryParams);
+            return await GetItemAsync<MeetingDetails>(path);
+        }
+
+        /// <summary>
         /// Creates a room. The authenticated user is automatically added as a member of the room. See the Memberships API to learn how to add more people to the room.
         /// </summary>
         /// <param name="title"></param>
