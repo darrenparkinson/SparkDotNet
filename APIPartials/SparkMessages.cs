@@ -24,7 +24,7 @@ namespace SparkDotNet
             var queryParams = new Dictionary<string, string>();
             //TODO: Throw Exception if room ID is empty?
             if (roomId != null) queryParams.Add("roomId",roomId);
-            
+
             if (mentionedPeople != null) queryParams.Add("mentionedPeople",mentionedPeople);
             //TODO Parse before as a DateTime and check it's ok before we send the request.
             if (before != null) queryParams.Add("before",before);
@@ -57,8 +57,9 @@ namespace SparkDotNet
         /// <param name="text"></param>
         /// <param name="markdown"></param>
         /// <param name="files"></param>
+        /// <param name="attachments"></param>
         /// <returns>Message object.</returns>
-        public async Task<Message> CreateMessageAsync(string roomId = null, string toPersonId = null, string toPersonEmail = null, string text = null, string markdown = null, string[] files = null )
+        public async Task<Message> CreateMessageAsync(string roomId = null, string toPersonId = null, string toPersonEmail = null, string text = null, string markdown = null, string[] files = null, string attachments = null)
         {
             var postBody = new Dictionary<string, object>();
             if (roomId != null) postBody.Add("roomId",roomId);
@@ -67,7 +68,7 @@ namespace SparkDotNet
             if (text != null) postBody.Add("text",text);
             if (markdown != null) postBody.Add("markdown",markdown);
             if (files != null) postBody.Add("files",files);
-            
+            if (attachments != null) postBody.Add("attachments", attachments);
             return await PostItemAsync<Message>(messagesBase,postBody);
         }
 
@@ -79,7 +80,7 @@ namespace SparkDotNet
         /// <returns>Boolean indicating success of operation.</returns>
         public async Task<bool> DeleteMessageAsync(string messageId)
         {
-            return await DeleteItemAsync($"{messagesBase}/{messageId}");            
+            return await DeleteItemAsync($"{messagesBase}/{messageId}");
         }
 
     }
