@@ -268,3 +268,36 @@ catch (SparkException ex)
     WriteLine(ex.Headers.GetValues("Trackingid").FirstOrDefault());
 }
 ```
+
+# Adaptive Cards
+
+As of version 1.2.6, support has been added for the attachments option when creating messages.  This enables the use of Adaptive Cards as per the [Cisco Documentation](https://developer.webex.com/docs/api/guides/cards).
+
+The simplest way to use this feature is to use the [Microsoft Adaptive Cards package](https://docs.microsoft.com/en-us/adaptive-cards/sdk/authoring-cards/net):
+
+```{.sh-session}
+dotnet add package AdaptiveCards
+```
+
+Then in your code:
+
+```{.cs}
+AdaptiveCard card = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
+card.Body.Add(new AdaptiveTextBlock()
+{
+    Text = "Hello",
+    Size = AdaptiveTextSize.ExtraLarge
+});
+
+card.Body.Add(new AdaptiveImage()
+{
+    Url = new Uri("http://adaptivecards.io/content/cats/1.png")
+});
+
+string json = card.ToJson();
+var webexTeamsAttachment = "{\"contentType\": \"application/vnd.microsoft.card.adaptive\",\"content\":" + json + "}";
+
+var res = await spark.CreateMessageAsync(roomId: RoomID, text: "Test Message", attachments: webexTeamsAttachment);
+```
+
+The content is expected to be JSON as a string.

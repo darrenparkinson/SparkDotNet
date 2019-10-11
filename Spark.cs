@@ -79,7 +79,20 @@ namespace SparkDotNet
             }
             else
             {
-                var jsonBody = JsonConvert.SerializeObject(bodyParams);
+                string jsonBody = "";
+                if (bodyParams.ContainsKey("attachments"))
+                {
+                    var attachments = JObject.Parse((string)bodyParams["attachments"]);
+                    bodyParams.Remove("attachments");
+                    var jsonParams = JsonConvert.SerializeObject(bodyParams);
+                    var json = JObject.Parse(jsonParams);
+                    json["attachments"] = attachments;
+                    jsonBody = JsonConvert.SerializeObject(json);
+                }
+                else
+                {
+                    jsonBody = JsonConvert.SerializeObject(bodyParams);
+                }
                 content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             }
 
