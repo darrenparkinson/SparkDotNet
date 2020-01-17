@@ -148,7 +148,7 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 10 endpoints covered by this library.  Please refer to the Cisco documentation for details of their use:
+There are 11 endpoints covered by this library.  Please refer to the Cisco documentation for details of their use:
 
 * [People](https://developer.ciscospark.com/resource-people.html)
 * [Rooms](https://developer.ciscospark.com/resource-rooms.html)
@@ -160,6 +160,7 @@ There are 10 endpoints covered by this library.  Please refer to the Cisco docum
 * [Organizations](https://developer.ciscospark.com/resource-organizations.html)
 * [Licenses](https://developer.ciscospark.com/resource-licenses.html)
 * [Roles](https://developer.ciscospark.com/resource-roles.html)
+* [AttachmentActions](https://developer.webex.com/docs/api/v1/attachment-actions)
 
 Each endpoint has a corresponding method in the Spark class mapping to `Get`, `Create`, `Update` and `Delete` based on the HTTP method used, `GET`, `POST`, `PUT` and `DELETE` respectively.  As an example, using the People endpoint, these map as follows:
 
@@ -301,3 +302,7 @@ var res = await spark.CreateMessageAsync(roomId: RoomID, text: "Test Message", a
 ```
 
 The content is expected to be JSON as a string.
+
+# Attachment Actions
+
+As of version 1.2.7, support has been added (with thanks to @mayankmaxsharma) for the Attachment Actions endpoint in order to retrieve attachment action details.
