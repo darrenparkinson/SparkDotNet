@@ -13,7 +13,6 @@ namespace SparkDotNet
         public string personDisplayName { get; set; }
         public string personOrgId { get; set; }
         public bool isModerator { get; set; }
-        public bool isMonitor { get; set; }
         public DateTime created { get; set; }
 
         public override string ToString()

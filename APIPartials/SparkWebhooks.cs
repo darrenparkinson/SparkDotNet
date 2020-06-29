@@ -18,7 +18,7 @@ namespace SparkDotNet
         {
             var queryParams = new Dictionary<string, string>();
             if (max > 0) queryParams.Add("max",max.ToString());
-            var path = getURL("/v1/webhooks", queryParams);
+            var path = getURL(webhooksBase, queryParams);
             return await GetItemsAsync<Webhook>(path);
         }
 
@@ -66,6 +66,17 @@ namespace SparkDotNet
         public async Task<bool> DeleteWebhookAsync(string webhookId)
         {
             return await DeleteItemAsync($"{webhooksBase}/{webhookId}");            
+        }
+
+
+        /// <summary>
+        /// Deletes a webhook, by object.
+        /// </summary>
+        /// <param name="webhook">The Webhook object to be deleted</param>
+        /// <returns>Boolean indicating success of operation.</returns>
+        public async Task<bool> DeleteWebhookAsync(Webhook webhook)
+        {
+            return await DeleteWebhookAsync(webhook.id);
         }
 
         /// <summary>
