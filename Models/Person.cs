@@ -19,9 +19,12 @@ namespace SparkDotNet
         public string[] roles { get; set; }
         public string[] licenses { get; set; }
         public DateTime created { get; set; }
+        public DateTime LastModified { get; set; }
         public string timeZone { get; set; }
         public DateTime lastActivity { get; set; }
         public string status { get; set; }
+        public bool InvitePending { get; set; }
+        public bool LoginEnabled { get; set; }
         public string type { get; set; }
 
 
