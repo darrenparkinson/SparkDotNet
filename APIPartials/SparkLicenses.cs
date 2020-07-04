@@ -13,7 +13,7 @@ namespace SparkDotNet
         /// <summary>
         /// List all licenses for a given organization. If no orgId is specified, the default is the organization of the authenticated user.
         /// </summary>
-        /// <param name="orgId"></param>
+        /// <param name="orgId">List licenses for this organization.</param>
         /// <param name="max"></param>
         /// <returns>List of License objects.</returns>
         public async Task<List<License>> GetLicensesAsync(string orgId = null, int max = 0)
@@ -29,7 +29,7 @@ namespace SparkDotNet
         /// Shows details for a license, by ID.
         /// Specify the license ID in the licenseId parameter in the URI.
         /// </summary>
-        /// <param name="licenseId"></param>
+        /// <param name="licenseId">The unique identifier for the license.</param>
         /// <returns>License object.</returns>
         public async Task<License> GetLicenseAsync(string licenseId)
         {

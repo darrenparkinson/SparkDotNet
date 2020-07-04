@@ -2,19 +2,34 @@ using System;
 using Newtonsoft.Json;
 
 namespace SparkDotNet {
+
     public class CallParkedAgainst
-    {
-        [JsonProperty(PropertyName = "name")]
+    {        
+        /// <summary>
+        /// Name of the Person where is call is parked against
+        /// </summary>
         public string Name { get; set; }
-        [JsonProperty(PropertyName = "number")]
+        
+        /// <summary>
+        /// Identified where the call is parked 
+        /// </summary>
         public string Number { get; set; }
-        [JsonProperty(PropertyName = "personId")]
+        
+        /// <summary>
+        /// Id of the person where the call is parked
+        /// </summary>
         public string PersonId { get; set; }
-        [JsonProperty(PropertyName = "placeId")]
+
+        /// <summary>
+        /// Id of the place where the call is parked.
+        /// </summary>
         public string PlaceId { get; set; }
-        [JsonProperty(PropertyName = "privacyEnabled")]
+
+        /// <summary>
+        /// Indicates whether privacy is enabled for the name and number.
+        /// </summary>
         public bool PrivacyEnabled { get; set; }
-        [JsonProperty(PropertyName = "callType")]
+        
         public string CallType { get; set; }
 
         public override string ToString() {
