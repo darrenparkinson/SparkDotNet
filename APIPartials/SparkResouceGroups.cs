@@ -14,7 +14,7 @@ namespace SparkDotNet
         /// ist resource groups.
         /// Use query parameters to filter the response.
         /// </summary>
-        /// <param name="orgId"></param>
+        /// <param name="orgId">List resource groups in this organization. Only admin users of another organization (such as partners) may use this parameter.</param>
         /// <returns>A list of Resource Group objects</returns>
         public async Task<List<ResourceGroup>> GetResourceGroupsAsync(string orgId = null)
         {

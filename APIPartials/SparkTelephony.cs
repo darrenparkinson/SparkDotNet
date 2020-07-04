@@ -59,7 +59,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="destination">The destination to be dialed. The destination can be digits or a URI. Some examples for destination include: 1234, 2223334444, +12223334444, *73, tel:+12223334444, user@company.domain, sip:user@company.domain</param>
         /// <returns>Dictionary with call information (callId: A unique identifier for the call which is used in all subsequent commands for this call; callSessionId: A unique identifier for the call session the call belongs to. This can be used to correlate multiple calls that are part of the same call session.)</returns>
-        public async Task<Dictionary<string, string>> PostCallDialAync(string destination)
+        public async Task<Dictionary<string, string>> CallDialAync(string destination)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("destination", destination);
@@ -71,7 +71,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="callId">The call identifier of the call to be answered.</param>
         /// <returns></returns>
-        public async Task<object> PostCallAnswerAsync(string callId)
+        public async Task<object> CallAnswerAsync(string callId)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -83,7 +83,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="callId">The call identifier of the call to be rejected.</param>
         /// <returns></returns>
-        public async Task<object> PostCallRejectAsync(string callId)
+        public async Task<object> CallRejectAsync(string callId)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -95,7 +95,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="callId">The call identifier of the call to be hangup.</param>
         /// <returns></returns>
-        public async Task<object> PostCallHangupAsync(string callId)
+        public async Task<object> CallHangupAsync(string callId)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -107,7 +107,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="callId">The call identifier of the call to be hold.</param>
         /// <returns></returns>
-        public async Task<object> PostCallHoldAsync(string callId)
+        public async Task<object> CallHoldAsync(string callId)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -119,7 +119,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="callId">The call identifier of the call to be resumed.</param>
         /// <returns></returns>
-        public async Task<object> PostCallResumeAsync(string callId)
+        public async Task<object> CallResumeAsync(string callId)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -133,7 +133,7 @@ namespace SparkDotNet
         /// <param name="destination">The destination to divert the call to. If toVoicemail is false, destination is required. The destination can be digits or a URI. Some examples for destination include: 1234, 2223334444, +12223334444, *73, tel:+12223334444, user@company.domain, sip:user@company.domain</param>
         /// <param name="toVoicemail">If set to true, the call is diverted to voicemail. If no destination is specified, the call is diverted to the user's own voicemail. If a destination is specified, the call is diverted to the specified user's voicemail.</param>
         /// <returns></returns>
-        public async Task<object> PostCallDivertAsync(string callId, string destination, bool toVoicemail)
+        public async Task<object> CallDivertAsync(string callId, string destination, bool toVoicemail)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -153,7 +153,7 @@ namespace SparkDotNet
         /// <param name="callId1">The call identifier of the first call to transfer. This parameter is mandatory if callId2 is provided.</param>
         /// <param name="callId2">The call identifier of the second call to transfer. This parameter is mandatory if callId1 is provided.</param>
         /// <returns></returns>
-        public async Task<object> PostCallTransferAsync(string callId1, string callid2)
+        public async Task<object> CallTransferAsync(string callId1, string callid2)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId1", callId1);
@@ -169,7 +169,7 @@ namespace SparkDotNet
         /// <param name="destination">dentifes where the call is to be parked. If not provided, the call is parked against the parking user. The destination can be digits or a URI. Some examples for destination include: 1234, 2223334444, +12223334444, *73, tel:+12223334444, user@company.domain, sip:user@company.domain</param>
         /// <param name="isGroupPark">If set to true, the call is parked against an automatically selected member of the user's call park group and the destination parameter is ignored.</param>
         /// <returns>A Call Park Against object containing the details of where the call has been parked.</returns>
-        public async Task<CallParkedAgainst> PostCallParkAsync(string callId, string destination, bool isGroupPark)
+        public async Task<CallParkedAgainst> CallParkAsync(string callId, string destination, bool isGroupPark)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("callId", callId);
@@ -185,14 +185,12 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="destination">dentifies where the call is parked. The number field from the park command response can be used as the destination for the retrieve command. If not provided, the call parked against the retrieving user is retrieved. The destination can be digits or a URI. Some examples for destination include: 1234, 2223334444, +12223334444, *73, tel:+12223334444, user@company.domain, sip:user@company.domain</param>
         /// <returns>Dictionary with call information (callId: A unique identifier for the call which is used in all subsequent commands for this call; callSessionId: A unique identifier for the call session the call belongs to. This can be used to correlate multiple calls that are part of the same call session.)</returns>
-        public async Task<Dictionary<string, string>> PostCallRetrieveAsync(string destination)
+        public async Task<Dictionary<string, string>> CallRetrieveAsync(string destination)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("destination", destination);
             return await PostItemAsync<Dictionary<string, string>>($"(telephonyBase)/calls/retrieve", postBody);
         }
-
-
         #endregion Calls POST commands
     }
 

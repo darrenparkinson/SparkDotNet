@@ -8,17 +8,17 @@ namespace SparkDotNet
     {
 
         private string membershipsBase = "/v1/memberships";
-        
+
         /// <summary>
         /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.
         /// - Use query parameters to filter the response.
         /// - Use roomId to list memberships for a room, by ID.
         /// - Use either personId or personEmail to filter the results.
         /// </summary>
-        /// <param name="roomId"></param>
-        /// <param name="personId"></param>
-        /// <param name="personEmail"></param>
-        /// <param name="max"></param>
+        /// <param name="roomId">List memberships associated with a room, by ID.</param>
+        /// <param name="personId">List memberships associated with a person, by ID. The roomId parameter is required when using this parameter.</param>
+        /// <param name="personEmail">List memberships associated with a person, by email address. The roomId parameter is required when using this parameter.</param>
+        /// <param name="max">Limit the maximum number of memberships in the response. Default: 100</param>
         /// <returns>A List of Membership objects.</returns>
         public async Task<List<Membership>> GetMembershipsAsync(string roomId = null, string personId = null, string personEmail = null, int max = 0)
         {
@@ -36,7 +36,7 @@ namespace SparkDotNet
         /// Get details for a membership by ID.
         /// Specify the membership ID in the membershipId URI parameter.
         /// </summary>
-        /// <param name="membershipId"></param>
+        /// <param name="membershipId">The unique identifier for the membership.</param>
         /// <returns>Membership object.</returns>
         public async Task<Membership> GetMembershipAsync(string membershipId)
         {
@@ -48,10 +48,10 @@ namespace SparkDotNet
         /// <summary>
         /// Add someone to a room by Person ID or email address; optionally making them a moderator.
         /// </summary>
-        /// <param name="roomId"></param>
-        /// <param name="personId"></param>
-        /// <param name="personEmail"></param>
-        /// <param name="isModerator"></param>
+        /// <param name="roomId">The room ID.</param>
+        /// <param name="personId">The person ID.</param>
+        /// <param name="personEmail">The email address of the person.</param>
+        /// <param name="isModerator">Whether or not the participant is a room moderator.</param>
         /// <returns>Membership object.</returns>
         public async Task<Membership> CreateMembershipAsync(string roomId, string personId = null, string personEmail = null, bool isModerator = false)
         {
@@ -67,7 +67,7 @@ namespace SparkDotNet
         /// Deletes a membership by ID.
         /// Specify the membership ID in the membershipId URI parameter.
         /// </summary>
-        /// <param name="membershipId"></param>
+        /// <param name="membershipId">The unique identifier for the membership.</param>
         /// <returns>Boolean representing the success of the operation.</returns>
         public async Task<bool> DeleteMembershipAsync(string membershipId)
         {
@@ -75,11 +75,21 @@ namespace SparkDotNet
         }
 
         /// <summary>
+        /// Deletes a membership by Membership Object.
+        /// Specify the membership object in the membership parameter.
+        /// </summary>
+        /// <param name="membership">The Membership object for the membership.</param>
+        /// <returns>Boolean representing the success of the operation.</returns>
+        public async Task<bool> DeleteMembershipAsync(Membership membership)
+        {
+            return await DeleteTeamMembershipAsync(membership.id);
+        }
+        /// <summary>
         /// Updates properties for a membership by ID.
         /// Specify the membership ID in the membershipId URI parameter.
         /// </summary>
-        /// <param name="membershipId"></param>
-        /// <param name="isModerator"></param>
+        /// <param name="membershipId">The unique identifier for the membership.</param>
+        /// <param name="isModerator">Whether or not the participant is a room moderator.</param>
         /// <returns>Membership object.</returns>
         public async Task<Membership> UpdateMembershipAsync(string membershipId, bool isModerator)
         {

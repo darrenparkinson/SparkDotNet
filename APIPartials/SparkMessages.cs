@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,13 +14,16 @@ namespace SparkDotNet
         /// Lists all messages in a room with roomType. If present, includes the associated media content attachment for each message. The roomType could be a group or direct(1:1).
         /// The list sorts the messages in descending order by creation date.
         /// </summary>
-        /// <param name="roomId"></param>
-        /// <param name="mentionedPeople"></param>
-        /// <param name="before"></param>
-        /// <param name="beforeMessage"></param>
-        /// <param name="max"></param>
+        /// <param name="roomId">List messages in a room, by ID.</param>
+        /// <param name="parentId">List messages with a parent, by ID.</param>
+        /// <param name="mentionedPeople">List messages with these people mentioned, by ID. Use me as a shorthand for the current API user. Only me or the person ID of the current user may be specified. Bots must include this parameter to list messages in group rooms (spaces).</param>
+        /// <param name="before">List messages sent before a date and time.</param>
+        /// <param name="beforeMessage">List messages sent before a message, by ID.</param>
+        /// <param name="max">Limit the maximum number of messages in the response. Default: 50</param>
         /// <returns>List of Message objects.</returns>
-        public async Task<List<Message>> GetMessagesAsync(string roomId, string parentId = null, string mentionedPeople = null, string before = null, string beforeMessage = null, int max = 0)
+        public async Task<List<Message>> GetMessagesAsync(string roomId, string parentId = null,
+                                                          string mentionedPeople = null, DateTime? before = null,
+                                                          string beforeMessage = null, int max = 0)
         {
             var queryParams = new Dictionary<string, string>();
             //TODO: Throw Exception if room ID is empty?
@@ -29,7 +33,7 @@ namespace SparkDotNet
 
             if (mentionedPeople != null) queryParams.Add("mentionedPeople",mentionedPeople);
             //TODO Parse before as a DateTime and check it's ok before we send the request.
-            if (before != null) queryParams.Add("before",before);
+            if (before != null) queryParams.Add("before", ((DateTime)before).ToString("o"));
             if (beforeMessage != null) queryParams.Add("beforeMessage",beforeMessage);
             if (max > 0) queryParams.Add("max",max.ToString());
 
@@ -63,7 +67,7 @@ namespace SparkDotNet
         /// Shows details for a message, by message ID.
         /// Specify the message ID in the messageId parameter in the URI.
         /// </summary>
-        /// <param name="messageId"></param>
+        /// <param name="messageId">The unique identifier for the message.</param>
         /// <returns>Message object.</returns>
         public async Task<Message> GetMessageAsync(string messageId)
         {
@@ -84,7 +88,9 @@ namespace SparkDotNet
         /// <param name="files">The public URL to a binary file to be posted into the room. Only one file is allowed per message. Uploaded files are automatically converted into a format that all Webex Teams clients can render. For the supported media types and the behavior of uploads, see the Message Attachments Guide. Possible values: http://www.example.com/images/media.png</param>
         /// <param name="attachments">Content attachments to attach to the message. Only one card per message is supported. See the Cards Guide for more information.</param>
         /// <returns>Message object.</returns>
-        public async Task<Message> CreateMessageAsync(string roomId = null, string parentId = null, string toPersonId = null, string toPersonEmail = null, string text = null, string markdown = null, string[] files = null, string attachments = null)
+        public async Task<Message> CreateMessageAsync(string roomId = null, string parentId = null, string toPersonId = null,
+                                                      string toPersonEmail = null, string text = null, string markdown = null,
+                                                      string[] files = null, string attachments = null)
         {
             var postBody = new Dictionary<string, object>();
             if (roomId != null) postBody.Add("roomId",roomId);
@@ -102,11 +108,22 @@ namespace SparkDotNet
         /// Deletes a message, by message ID.
         /// Specify the message ID in the messageId parameter in the URI.
         /// </summary>
-        /// <param name="messageId"></param>
+        /// <param name="messageId">The unique identifier for the message.</param>
         /// <returns>Boolean indicating success of operation.</returns>
         public async Task<bool> DeleteMessageAsync(string messageId)
         {
             return await DeleteItemAsync($"{messagesBase}/{messageId}");
+        }
+
+        /// <summary>
+        /// Deletes a message, by message object.
+        /// Specify the message object in the message parameter in the URI.
+        /// </summary>
+        /// <param name="message">The message object for the message.</param>
+        /// <returns>Boolean indicating success of operation.</returns>
+        public async Task<bool> DeleteMessageAsync(Message message)
+        {
+            return await DeleteMessageAsync(message.id);
         }
 
     }

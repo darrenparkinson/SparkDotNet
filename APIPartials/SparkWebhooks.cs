@@ -8,11 +8,11 @@ namespace SparkDotNet
     {
 
         private string webhooksBase = "/v1/webhooks";
-        
+
         /// <summary>
         /// Lists all of your webhooks.
         /// </summary>
-        /// <param name="max"></param>
+        /// <param name="max">Limit the maximum number of webhooks in the response. Default: 100</param>
         /// <returns>List of Webhook objects.</returns>
         public async Task<List<Webhook>> GetWebhooksAsync(int max = 0)
         {
@@ -26,7 +26,7 @@ namespace SparkDotNet
         /// Shows details for a webhook, by ID.
         /// Specify the webhook ID in the webhookId parameter in the URI.
         /// </summary>
-        /// <param name="webhookId"></param>
+        /// <param name="webhookId">The unique identifier for the webhook.</param>
         /// <returns>Webhook object.</returns>
         public async Task<Webhook> GetWebhookAsync(string webhookId)
         {
@@ -38,22 +38,22 @@ namespace SparkDotNet
         /// <summary>
         /// Creates a webhook.
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="targetUrl"></param>
-        /// <param name="resource"></param>
-        /// <param name="sparkEvent"></param>
-        /// <param name="secret"></param>
-        /// <param name="filter"></param>
+        /// <param name="name">A user-friendly name for the webhook.</param>
+        /// <param name="targetUrl">The URL that receives POST requests for each event.</param>
+        /// <param name="resource">The resource type for the webhook. Creating a webhook requires 'read' scope on the resource the webhook is for. Possible values: memberships, messages, rooms</param>
+        /// <param name="sparkEvent">The event type for the webhook. Possible values: created, updated, deleted</param>
+        /// <param name="secret">The secret used to generate payload signature.</param>
+        /// <param name="filter">The filter that defines the webhook scope.</param>
         /// <returns>Webhook object.</returns>
-        public async Task<Webhook> CreateWebhookAsync(string name, string targetUrl, string resource, string sparkEvent, string secret, string filter = null)
+        public async Task<Webhook> CreateWebhookAsync(string name, string targetUrl, string resource, string sparkEvent, string secret = null, string filter = null)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("name", name);
             postBody.Add("targetUrl", targetUrl);
             postBody.Add("resource", resource);
             postBody.Add("event", sparkEvent);
-            if (filter != null) { postBody.Add("filter", filter); }
-            postBody.Add("secret", secret);
+            if (filter != null) postBody.Add("filter", filter);
+            if (secret != null) postBody.Add("secret", secret);
             return await PostItemAsync<Webhook>(webhooksBase, postBody);
         }
 
@@ -61,7 +61,7 @@ namespace SparkDotNet
         /// Deletes a webhook, by ID.
         /// Specify the webhook ID in the webhookId parameter in the URI.
         /// </summary>
-        /// <param name="webhookId"></param>
+        /// <param name="webhookId">The unique identifier for the webhook.</param>
         /// <returns>Boolean indicating success of operation.</returns>
         public async Task<bool> DeleteWebhookAsync(string webhookId)
         {
@@ -83,23 +83,22 @@ namespace SparkDotNet
         /// Updates a webhook, by ID.
         /// Specify the webhook ID in the webhookId parameter in the URI.
         /// </summary>
-        /// <param name="webhookId"></param>
-        /// <param name="name"></param>
-        /// <param name="targetUrl"></param>
+        /// <param name="webhookId">The unique identifier for the webhook.</param>
+        /// <param name="name">A user-friendly name for the webhook.</param>
+        /// <param name="targetUrl">The URL that receives POST requests for each event.</param>
+        /// <param name="secret">The secret used to generate payload signature.</param>
+        /// <param name="status">The status of the webhook. Use active to reactivate a disabled webhook. Possible values: active, inactive</param>
         /// <returns>Webhook object.</returns>
-        public async Task<Webhook> UpdateWebhookAsync(string webhookId, string name, string targetUrl)
+        public async Task<Webhook> UpdateWebhookAsync(string webhookId, string name, string targetUrl, string secret = null, string status = null)
         {
             var putBody = new Dictionary<string, object>();
             putBody.Add("name",name);
             putBody.Add("targetUrl", targetUrl);
+            if (secret != null) putBody.Add("secret", secret);
+            if (status != null) putBody.Add("status", status);
             var path = $"{webhooksBase}/{webhookId}";
             return await UpdateItemAsync<Webhook>(path, putBody);
         }
-
-
-
     }
-
-        
 
 }

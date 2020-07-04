@@ -13,7 +13,7 @@ namespace SparkDotNet
         /// <summary>
         /// List all roles.
         /// </summary>
-        /// <param name="max"></param>
+        /// <param name="max">The maximum number of objects to be returned</param>
         /// <returns>List of Role objects.</returns>
         public async Task<List<Role>> GetRolesAsync(int max = 0)
         {
@@ -27,7 +27,7 @@ namespace SparkDotNet
         /// Shows details for a role, by ID.
         // Specify the role ID in the roleId parameter in the URI.
         /// </summary>
-        /// <param name="roleId"></param>
+        /// <param name="roleId">The unique identifier for the role.</param>
         /// <returns>Role object.</returns>
         public async Task<Role> GetRoleAsync(string roleId)
         {
