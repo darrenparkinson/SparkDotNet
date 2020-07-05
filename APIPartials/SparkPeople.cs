@@ -85,7 +85,7 @@ namespace SparkDotNet
         /// <returns>The newly created person</returns>
         public async Task<Person> CreatePersonAsync(Person person)
         {
-            return await CreatePersonAsync(person.emails, person.displayName, person.firstName, person.lastName, person.avatar, person.orgId, person.roles, person.licenses)
+            return await CreatePersonAsync(person.emails, person.displayName, person.firstName, person.lastName, person.avatar, person.orgId, person.roles, person.licenses);
         }
 
         /// <summary>

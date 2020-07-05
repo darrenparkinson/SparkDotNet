@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
 
@@ -11,7 +10,7 @@ namespace SparkDotNet {
     /// Use this API to list the connectors configured in an organization and to determine if any connectors have any unresolved alarms
     /// associated with them.
     /// </summary>
-    public class HybridConnector
+    public class HybridConnector : WebexObject
     {
         /// <summary>
         /// A unique identifier for the connector.
@@ -56,10 +55,6 @@ namespace SparkDotNet {
         /// <summary>
         /// A list of alarms raised on the connector.
         /// </summary>
-        public HybridConnectorAlarm[] Alarms { get; set; };
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
+        public HybridConnectorAlarm[] Alarms { get; set; }
     }
 }

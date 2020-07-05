@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace SparkDotNet
 {
 
-    public class AdminEventData
+    public class AdminEventData : WebexObject
     {
         /// <summary>
         /// The display name of the organization.
@@ -80,10 +80,5 @@ namespace SparkDotNet
         /// The name of the organization being acted upon.
         /// </summary>
         public string TargetOrgName { get; set; }
-
-        public override string ToString()
-        { 
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

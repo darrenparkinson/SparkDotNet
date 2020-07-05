@@ -94,7 +94,7 @@ namespace SparkDotNet
         /// <returns>true if the update succeeded, false otherwise</returns>
         public async Task<bool> UpdateReourceGroupMembershipAsync(ResourceGroupMembership resourceGroupMembership)
         {
-            return await UpdateReourceGroupMembershipAsync(resourceGroupMembership.Id, resourceGroupMembership.ResourceGroupId, resourceGroupMembership.LicenseId, resourceGroupMembership.PersonId, resourceGroupMembership.PersonOrgId, resourceGroupMembership.Status)
+            return await UpdateReourceGroupMembershipAsync(resourceGroupMembership.Id, resourceGroupMembership.ResourceGroupId, resourceGroupMembership.LicenseId, resourceGroupMembership.PersonId, resourceGroupMembership.PersonOrgId, resourceGroupMembership.Status);
         }
 
     }

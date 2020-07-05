@@ -1,8 +1,6 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
-
     /// <summary>
     /// Teams are groups of people with a set of rooms that are visible to all members of that team.
     /// This API is used to manage the teams themselves. Teams are created and deleted with this API.
@@ -10,7 +8,7 @@ namespace SparkDotNet {
     /// To manage people in a team see the Team Memberships API.
     /// To manage team rooms see the Rooms API.
     /// </summary>
-    public class Team
+    public class Team : WebexObject
     {
         /// <summary>
         /// A unique identifier for the team.
@@ -31,9 +29,5 @@ namespace SparkDotNet {
         /// The date and time the team was created.
         /// </summary>
         public DateTime created { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -9,7 +8,7 @@ namespace SparkDotNet
     /// Administrators with accounts created before 2019 who have never logged into Webex Control Hub will
     /// need to log into Webex Control Hub at least once to enable access to this API.
     /// </summary>
-    public class AdminEvent
+    public class AdminEvent : WebexObject
     {
         /// <summary>
         /// Event Data details
@@ -35,10 +34,5 @@ namespace SparkDotNet
         /// The personId of the person who made the change.
         /// </summary>
         public string ActorId { get; set; }
-
-        public override string ToString()
-        { 
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

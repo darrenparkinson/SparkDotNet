@@ -1,8 +1,7 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
-    public class CallHistoryRecord
+    public class CallHistoryRecord : WebexObject
     {
         /// <summary>
         /// The type of call history record.
@@ -31,9 +30,5 @@ namespace SparkDotNet {
         /// For a received call history record, this is when the call was answered.
         /// </summary>
         public DateTime time { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

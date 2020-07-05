@@ -2,14 +2,13 @@ using System;
 using Newtonsoft.Json;
 
 namespace SparkDotNet {
-
     /// <summary>
     /// Webhooks allow your app to be notified via HTTP when a specific event occurs in Webex Teams. For example,
     /// your app can register a webhook to be notified when a new message is posted into a specific room.
     /// Events trigger in near real-time allowing your app and backend IT systems to stay in sync with new content and room activity.
     /// Check the Webhooks Guide and our blog regularly for announcements of additional webhook resources and event types.
     /// </summary>
-    public class Webhook
+    public class Webhook : WebexObject
     {
         /// <summary>
         /// A unique identifier for the webhook.
@@ -63,15 +62,5 @@ namespace SparkDotNet {
         /// The date and time the webhook was created.
         /// </summary>
         public DateTime created { get; set; }
-
-        public string orgId { get; set; }
-        public string createdBy { get; set; }
-        public string appId { get; set; }
-        public string ownedBy { get; set; }
-
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
 
@@ -8,7 +7,7 @@ namespace SparkDotNet {
     /// Compliance Officers may use the Events API to retrieve events for all users within an organization.
     /// See the Compliance Guide for more information.
     /// </summary>
-    public class Event
+    public class Event : WebexObject
     {
         /// <summary>
         /// The unique identifier for the event.
@@ -50,9 +49,5 @@ namespace SparkDotNet {
         /// This object will contain the event's resource, such as memberships or messages, at the time the event took place.
         /// </summary>
         public EventData[] Data { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

@@ -1,9 +1,6 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet
 {
-    public class MeetingTelephony
+    public class MeetingTelephony : WebexObject
     {
 
         /// <summary>
@@ -21,11 +18,6 @@ namespace SparkDotNet
         /// HATEOAS information of global call-in numbers for joining teleconference from a phone.
         /// </summary>
         public MeetingTelephonyLink[] Links { get; set; }
-        
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
 

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -11,7 +10,7 @@ namespace SparkDotNet
     /// Several types of meeting objects are supported by this API, such as meeting series, scheduled meeting, and meeting instances.
     /// See the Webex Meetings guide for more information about the types of meetings.
     /// </summary>
-    public class Meeting
+    public class Meeting : WebexObject
     {
         /// <summary>
         /// Unique identifier for meeting.
@@ -168,15 +167,5 @@ namespace SparkDotNet
         /// Information for callbacks from meeting to phone or for joining a teleconference using a phone.
         /// </summary>
         public MeetingTelephony Telephony { get; set; }
-
-
-
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-
-
 }

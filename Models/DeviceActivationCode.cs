@@ -1,9 +1,8 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
-    public class DeviceActivationCode
+    public class DeviceActivationCode : WebexObject
     {
         /// <summary>
         /// A unique identifier for the activation code.
@@ -29,11 +28,6 @@ namespace SparkDotNet
         /// The date and time the activation code expires.
         /// </summary>
         public DateTime Expires { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
 

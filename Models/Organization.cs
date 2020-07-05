@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
 
@@ -8,7 +7,7 @@ namespace SparkDotNet {
     /// Organizations may manage other organizations or be managed themselves.
     /// This organizations resource can be accessed only by an admin.
     /// </summary>
-    public class Organization
+    public class Organization : WebexObject
     {
         /// <summary>
         /// A unique identifier for the organization.
@@ -46,10 +45,5 @@ namespace SparkDotNet {
         /// </summary>
         public string XsiDomain { get; set; }
         #endregion XSI Properties
-
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

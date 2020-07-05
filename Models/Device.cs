@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -11,7 +10,7 @@ namespace SparkDotNet
     /// in an organization requires an administrator auth token with the spark-admin:devices_read scope. Adding, updating,
     /// or deleting all devices in an organization requires an administrator auth token with the spark-admin:devices_write scope.
     /// </summary>
-    public class Device
+    public class Device : WebexObject
     {
         /// <summary>
         /// A unique identifier for the device.
@@ -107,12 +106,5 @@ namespace SparkDotNet
         /// The date and time that the device was registered, in ISO8601 format.
         /// </summary>
         public DateTime Created { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-
-
 }

@@ -1,13 +1,9 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet
 {
-
     /// <summary>
     /// HATEOAS information of global call-in numbers for joining teleconference from a phone.
     /// </summary>
-    public class MeetingTelephonyLink
+    public class MeetingTelephonyLink : WebexObject
     {
         /// <summary>
         /// Link relation describing how the target resource is related to the current context (conforming with RFC5998).
@@ -23,12 +19,5 @@ namespace SparkDotNet
         /// Target resource method (conforming with RFC5998).
         /// </summary>
         public string Method { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-
-
 }

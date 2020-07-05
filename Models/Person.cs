@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -13,7 +11,7 @@ namespace SparkDotNet
     /// To learn more about managing people in a room see the Memberships API.
     /// For information about how to allocate Hybrid Services licenses to people, see the Managing Hybrid Services guide.
     /// </summary>
-    public class Person
+    public class Person : WebexObject
     {
         /// <summary>
         /// A unique identifier for the person.
@@ -132,12 +130,5 @@ namespace SparkDotNet
         /// appuser: account is a guest user
         /// </summary>
         public string type { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
-
-
 }

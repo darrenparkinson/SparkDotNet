@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-
-namespace SparkDotNet
+﻿namespace SparkDotNet
 {
-    public class MeetingDetails
+    public class MeetingDetails : WebexObject
     {
         /// <summary>
         /// A unique identifier for the room.
@@ -33,10 +31,5 @@ namespace SparkDotNet
         /// The toll (local) PSTN number for the room.
         /// </summary>
         public string callInTollNumber { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

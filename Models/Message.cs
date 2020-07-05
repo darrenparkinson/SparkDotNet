@@ -1,16 +1,14 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
-
     /// <summary>
     /// Messages are how we communicate in a room.In Webex Teams, each message is displayed on its own line along with a timestamp and sender information.
     /// Use this API to list, create, and delete messages.
     /// Message can contain plain text, rich text, and a file attachment.
     /// Just like in the Webex Teams app, you must be a member of the room in order to target it with this API.
     /// </summary>
-    public class Message
+    public class Message : WebexObject
     {
         /// <summary>
         /// The unique identifier for the message.
@@ -100,12 +98,6 @@ namespace SparkDotNet
         /// The date and time that the message was last edited by the author. This field is only present when the message contents have changed.
         /// </summary>
         public DateTime updated { get; set; }
-
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
 

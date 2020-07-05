@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -9,7 +8,7 @@ namespace SparkDotNet
     /// or deleted to remove them from the team.
     /// Just like in the Webex Teams app, you must be a member of the team in order to list its memberships or invite people.
     /// </summary>
-    public class TeamMembership
+    public class TeamMembership : WebexObject
     {
         /// <summary>
         /// A unique identifier for the team membership.
@@ -50,10 +49,5 @@ namespace SparkDotNet
         /// The date and time when the team membership was created.
         /// </summary>
         public DateTime created { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

@@ -1,8 +1,7 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
-    public class HybridConnectorAlarm
+    public class HybridConnectorAlarm : WebexObject
     {
         /// <summary>
         /// A unique identifier for the alarm.
@@ -33,9 +32,5 @@ namespace SparkDotNet {
         /// The ID of the connector the alarm is raised on.
         /// </summary>
         public string HybridConnectorId { get; set; }
-        
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

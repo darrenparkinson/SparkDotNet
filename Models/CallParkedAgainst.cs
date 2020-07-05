@@ -1,9 +1,6 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet {
 
-    public class CallParkedAgainst
+    public class CallParkedAgainst : WebexObject
     {        
         /// <summary>
         /// Name of the Person where is call is parked against
@@ -31,9 +28,5 @@ namespace SparkDotNet {
         public bool PrivacyEnabled { get; set; }
         
         public string CallType { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

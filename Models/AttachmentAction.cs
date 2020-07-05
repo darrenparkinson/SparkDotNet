@@ -1,12 +1,11 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
     /// <summary>
     /// Users create attachment actions by interacting with message attachments such as clicking on a submit button in a card.
     /// </summary>
-    public class AttachmentAction
+    public class AttachmentAction : WebexObject
     {
         /// <summary>
         /// A unique identifier for the action.
@@ -42,10 +41,5 @@ namespace SparkDotNet
         /// The date and time the action was created.
         /// </summary>
         public DateTime created { get; set; }
-
-        public override string ToString()
-        { 
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

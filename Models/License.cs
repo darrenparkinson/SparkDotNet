@@ -1,6 +1,3 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet {
 
     /// <summary>
@@ -9,7 +6,7 @@ namespace SparkDotNet {
     /// This license resource can be accessed only by an admin.
     /// To learn about how to allocate Hybrid Services licenses, see the Managing Hybrid Services guide.
     /// </summary>
-    public class License
+    public class License : WebexObject
     {
 
         /// <summary>
@@ -49,9 +46,5 @@ namespace SparkDotNet {
         /// Site Admin managed site: the site is managed by Site Administration
         /// </summary>
         public string SiteType { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

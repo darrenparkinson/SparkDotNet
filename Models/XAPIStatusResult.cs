@@ -1,16 +1,7 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet
 {
-
-    public class XAPIStatusResult
+    public class XAPIStatusResult : WebexObject
     {
         public XAPIStatusResultAudio Audio { get; set; }
-
-        public override string ToString()
-        { 
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

@@ -1,8 +1,4 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet {
-
     /// <summary>
     /// Resource Group Memberships represent a person's relationship to a Resource Group for a particular Hybrid Services license.
     /// Users assigned a new license will be automatically placed in a "default" Resource Group.
@@ -11,7 +7,7 @@ namespace SparkDotNet {
     /// Updating memberships requires an administrator auth token with the spark-admin:resource_group_memberships_write scope.
     /// To manage Resource Groups, see the Resource Groups API.For more information about Resource Groups, see the Managing Hybrid Services guide.
     /// </summary>
-    public class ResourceGroupMembership
+    public class ResourceGroupMembership : WebexObject
     {
         /// <summary>
         /// A unique identifier for the resource group membership.
@@ -45,9 +41,5 @@ namespace SparkDotNet {
         /// error: error present
         /// </summary>
         public string Status { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

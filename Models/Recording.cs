@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -7,7 +6,7 @@ namespace SparkDotNet
     /// Recordings are meeting content captured in a meeting or files uploaded via the upload page for your Webex site.
     /// This API manages recordings.Recordings may be retrieved via download or playback links defined by downloadUrl or playbackUrl in the response body.
     /// </summary>
-    public class Recording
+    public class Recording : WebexObject
     {
         /// <summary>
         /// A unique identifier for recording.
@@ -59,11 +58,6 @@ namespace SparkDotNet
         /// Whether or not the recording has been shared to the current user.
         /// </summary>
         public bool ShareToMe { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 
 

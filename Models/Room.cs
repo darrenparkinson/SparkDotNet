@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -12,7 +11,7 @@ namespace SparkDotNet
     /// To manage people in a room see the Memberships API.
     /// To post content see the Messages API.
     /// </summary>
-    public class Room
+    public class Room : WebexObject
     {
         /// <summary>
         /// A unique identifier for the room.
@@ -60,10 +59,5 @@ namespace SparkDotNet
         /// The ID of the organization which owns this room. See Webex Teams Data in the Compliance Guide for more information.
         /// </summary>
         public string OwnerId { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

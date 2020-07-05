@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -10,7 +9,7 @@ namespace SparkDotNet
     /// Viewing the list of all places in an organization requires an administrator auth token with the spark-admin:places_read scope.
     /// Adding, updating, or deleting all places in an organization requires an administrator auth token with the spark-admin:places_write scope.
     /// </summary>
-    public class Place
+    public class Place : WebexObject
     {
         /// <summary>
         /// Unique identifier for the Place.
@@ -36,10 +35,5 @@ namespace SparkDotNet
         /// The date and time that the place was registered, in ISO8601 format.
         /// </summary>
         public DateTime Created { get; set; }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

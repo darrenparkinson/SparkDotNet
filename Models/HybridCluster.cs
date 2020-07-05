@@ -1,6 +1,3 @@
-using System;
-using Newtonsoft.Json;
-
 namespace SparkDotNet {
 
     /// <summary>
@@ -8,7 +5,7 @@ namespace SparkDotNet {
     /// Listing and viewing Hybrid Clusters requires an administrator auth token with the spark-admin:hybrid_clusters_read scope.
     /// Hybrid Clusters are associated with Resource Groups. See the Resource Groups API for more information.
     /// </summary>
-    public class HybridCluster
+    public class HybridCluster : WebexObject
     {
         /// <summary>
         /// A unique identifier for the cluster.
@@ -29,9 +26,5 @@ namespace SparkDotNet {
         /// The ID of the resource group this cluster belongs to.
         /// </summary>
         public string ResourceGroupId { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }

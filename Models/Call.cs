@@ -1,9 +1,8 @@
 using System;
-using Newtonsoft.Json;
 
 namespace SparkDotNet {
 
-    public class Call
+    public class Call : WebexObject
     {
         /// <summary>
         /// The call identifier of the call.
@@ -72,9 +71,5 @@ namespace SparkDotNet {
         /// The call's current recording state. Only present when the user's call recording has been invoked during the life of the call.
         /// </summary>
         public string RecordingState { get; set; }
-
-        public override string ToString() {
-            return JsonConvert.SerializeObject(this);
-        }
     }
 }
