@@ -1,6 +1,6 @@
 # SparkDotNet
 
-An unofficial dotnet library for consuming RESTful APIs for Cisco Spark. Please visit Cisco at http://developer.ciscospark.com/.
+An unofficial dotnet library for consuming RESTful APIs for Cisco Spark. Please visit Cisco at https://developer.webex.com/.
 
 ```{.cs}
 using SparkDotNet;
@@ -148,30 +148,43 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 11 endpoints covered by this library.  Please refer to the Cisco documentation for details of their use:
+There are 24 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
 
-* [People](https://developer.ciscospark.com/resource-people.html)
-* [Rooms](https://developer.ciscospark.com/resource-rooms.html)
-* [Memberships](https://developer.ciscospark.com/resource-memberships.html)
-* [Messages](https://developer.ciscospark.com/resource-messages.html)
-* [Teams](https://developer.ciscospark.com/resource-teams.html)
-* [Team Memberships](https://developer.ciscospark.com/resource-team-memberships.html)
-* [Webhooks](https://developer.ciscospark.com/resource-webhooks.html)
-* [Organizations](https://developer.ciscospark.com/resource-organizations.html)
-* [Licenses](https://developer.ciscospark.com/resource-licenses.html)
-* [Roles](https://developer.ciscospark.com/resource-roles.html)
-* [AttachmentActions](https://developer.webex.com/docs/api/v1/attachment-actions)
+* [Admin Audit Events] (https://developer.webex.com/docs/api/v1/admin-audit-events)
+* [Attachment Actions] (https://developer.webex.com/docs/api/v1/attachment-actions)
+* [Call Controls] (https://developer.webex.com/docs/api/v1/call-controls)
+* [Devices] (https://developer.webex.com/docs/api/v1/devices)
+* [Events] (https://developer.webex.com/docs/api/v1/events)
+* [Hybrid Clusters] (https://developer.webex.com/docs/api/v1/hybrid-clusters)
+* [Hybrid Connectors] (https://developer.webex.com/docs/api/v1/hybrid-connectors)
+* [Licenses] (https://developer.webex.com/docs/api/v1/licenses)
+* [Meeting Invitees] (https://developer.webex.com/docs/api/v1/meeting-invitees)
+* [Meetings] (https://developer.webex.com/docs/api/v1/meetings)
+* [Memberships] (https://developer.webex.com/docs/api/v1/memberships)
+* [Messages] (https://developer.webex.com/docs/api/v1/messages)
+* [Organizations (including XSI)] (https://developer.webex.com/docs/api/v1/organizations)
+* [People] (https://developer.webex.com/docs/api/v1/people)
+* [Places] (https://developer.webex.com/docs/api/v1/places)
+* [Recordings] (https://developer.webex.com/docs/api/v1/recordings)
+* [Resource Group Membership] (https://developer.webex.com/docs/api/v1/resource-group-memberships)
+* [Resource Groups] (https://developer.webex.com/docs/api/v1/resource-groups)
+* [Roles] (https://developer.webex.com/docs/api/v1/roles)
+* [Rooms] (https://developer.webex.com/docs/api/v1/rooms)
+* [Team Mebership] (https://developer.webex.com/docs/api/v1/team-memberships)
+* [Teams] (https://developer.webex.com/docs/api/v1/teams)
+* [Webhooks] (https://developer.webex.com/docs/api/v1/webhooks)
+* [xAPI] (https://developer.webex.com/docs/api/v1/xapi)
 
 Each endpoint has a corresponding method in the Spark class mapping to `Get`, `Create`, `Update` and `Delete` based on the HTTP method used, `GET`, `POST`, `PUT` and `DELETE` respectively.  As an example, using the People endpoint, these map as follows:
 
 | Cisco Endpoint | HTTP Method | Spark Class Method |
 | -------------- |:-----------:|:-------------------|
-| [List People](https://developer.ciscospark.com/endpoint-people-get.html)| GET |  GetPeopleAsync() | 
-| [Create a Person](https://developer.ciscospark.com/endpoint-people-post.html)| POST | CreatePersonAsync() | 
-| [Get Person Details](https://developer.ciscospark.com/endpoint-people-personId-get.html)| GET | GetPersonAsync() | 
-| [Update a Person](https://developer.ciscospark.com/endpoint-people-personId-put.html)   | PUT | UpdatePersonAsync() | 
-| [Delete a Person](https://developer.ciscospark.com/endpoint-people-personId-delete.html)| DELETE | DeletePersonAsync() |
-| [Get My Details](https://developer.ciscospark.com/endpoint-people-me-get.html)| GET | GetMeAsync() |
+| [List People](https://developer.webex.com/docs/api/v1/people/list-people)| GET |  GetPeopleAsync() | 
+| [Create a Person](https://developer.webex.com/docs/api/v1/people/create-a-person)| POST | CreatePersonAsync() | 
+| [Get Person Details](https://developer.webex.com/docs/api/v1/people/get-person-details)| GET | GetPersonAsync() | 
+| [Update a Person](https://developer.webex.com/docs/api/v1/people/update-a-person)   | PUT | UpdatePersonAsync() | 
+| [Delete a Person](https://developer.webex.com/docs/api/v1/people/delete-a-person)| DELETE | DeletePersonAsync() |
+| [Get My Own Details](https://developer.webex.com/docs/api/v1/people/get-my-own-details)| GET | GetMeAsync() |
 
 Where parameters are optional, they are also optional in the class methods.  These are variables that have default values specified. As usual, you must specify any required variables in the correct order before specifying any optional variables.
 
@@ -208,7 +221,7 @@ Note that you can only send a single file at a time using this method, even thou
 
 # Pagination
 
-An initial version of pagination has been added to provide support for Cisco Spark API as outlined on [the Cisco Spark Developer Portal](https://developer.ciscospark.com/pagination.html).  
+An initial version of pagination has been added to provide support for Cisco Spark API as outlined on [the Cisco Spark Developer Portal](https://developer.webex.com/docs/api/basics#pagination).  
 
 For backwards compatibility, this has been added as a separate method (`GetItemsWithLinksAsync`) which you must use over and above those specific to each resource if you specifically want to use pagination.  
 

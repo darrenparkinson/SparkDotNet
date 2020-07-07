@@ -13,7 +13,7 @@ namespace SparkDotNet
         /// <summary>
         /// Lists teams to which the authenticated user belongs.
         /// </summary>
-        /// <param name="max"></param>
+        /// <param name="max">Limit the maximum number of teams in the response. Default: 100</param>
         /// <returns>List of Team objects.</returns>
         public async Task<List<Team>> GetTeamsAsync(int max = 0)
         {
@@ -27,7 +27,7 @@ namespace SparkDotNet
         /// Shows details for a team, by ID.
         /// Specify the room ID in the teamId parameter in the URI.
         /// </summary>
-        /// <param name="teamId"></param>
+        /// <param name="teamId">The unique identifier for the team.</param>
         /// <returns>Team object.</returns>
         public async Task<Team> GetTeamAsync(string teamId)
         {
@@ -37,9 +37,10 @@ namespace SparkDotNet
         }
 
         /// <summary>
-        /// Creates a team. The authenticated user is automatically added as a member of the team. See the Team Memberships API to learn how to add more people to the team.
+        /// Creates a team. The authenticated user is automatically added as a member of the team.
+        /// See the Team Memberships API to learn how to add more people to the team.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">A user-friendly name for the team.</param>
         /// <returns>Team object.</returns>
         public async Task<Team> CreateTeamAsync(string name)
         {
@@ -52,19 +53,29 @@ namespace SparkDotNet
         /// Deletes a team, by ID.
         /// Specify the team ID in the teamId parameter in the URI.
         /// </summary>
-        /// <param name="teamId"></param>
+        /// <param name="teamId">The unique identifier for the team.</param>
         /// <returns>Boolean indicating success of operation.</returns>
         public async Task<bool> DeleteTeamAsync(string teamId)
         {
-            return await DeleteItemAsync($"{teamsBase}/{teamId}");            
+            return await DeleteItemAsync($"{teamsBase}/{teamId}");
+        }
+
+        /// <summary>
+        /// Deletes a team, by object.
+        /// </summary>
+        /// <param name="team">The team object.</param>
+        /// <returns>Boolean indicating success of operation.</returns>
+        public async Task<bool> DeleteTeamAsync(Team team)
+        {
+            return await DeleteTeamAsync(team.id);
         }
 
         /// <summary>
         /// Updates details for a team, by ID.
         /// Specify the team ID in the teamId parameter in the URI.
         /// </summary>
-        /// <param name="teamId"></param>
-        /// <param name="name"></param>
+        /// <param name="teamId">The unique identifier for the team.</param>
+        /// <param name="name">A user-friendly name for the team.</param>
         /// <returns>Team object.</returns>
         public async Task<Team> UpdateTeamAsync(string teamId, string name)
         {
