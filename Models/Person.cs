@@ -34,6 +34,16 @@ namespace SparkDotNet
         public SipAddress[] SipAddresses { get; set; }
 
         /// <summary>
+        /// The extension of the person retrieved from BroadCloud.
+        /// </summary>
+        public string Extension { get; set; }
+
+        /// <summary>
+        /// The ID of the location for this person retrieved from BroadCloud.
+        /// </summary>
+        public string LocationId { get; set; }
+
+        /// <summary>
         /// The full name of the person.
         /// </summary>
         public string displayName { get; set; }
