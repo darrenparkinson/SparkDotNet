@@ -70,12 +70,15 @@ namespace SparkDotNet
         /// <param name="orgId">The ID of the organization to which this person belongs.</param>
         /// <param name="roles">An array of role strings representing the roles to which this person belongs.</param>
         /// <param name="licenses">An array of license strings allocated to this person.</param>
+        /// <param name="callingData">Include BroadCloud user details in the response. Default: false</param>
+        /// <param name="phoneNumbers">Phone numbers for the person.</param>
         /// <param name="extension">The extension of the person retrieved from BroadCloud.</param>
         /// <param name="locationId">The ID of the location for this person retrieved from BroadCloud.</param>
         /// <returns>Person object.</returns>
         public async Task<Person> CreatePersonAsync(string[] emails, string displayName = null, string firstName = null, string lastName = null,
                                                     string avatar = null, string orgId = null, string[] roles = null, string[] licenses = null,
-                                                    bool? callingData = null, string extension = null, string locationId = null)
+                                                    bool? callingData = null, PhoneNumber[] phoneNumbers = null, string extension = null,
+                                                    string locationId = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (callingData != null) queryParams.Add("callingData", callingData.ToString());
@@ -90,8 +93,10 @@ namespace SparkDotNet
             if (orgId != null) postBody.Add("orgId", orgId);
             if (roles != null) postBody.Add("roles", roles);
             if (licenses != null) postBody.Add("licenses", licenses);
+            if (phoneNumbers != null) postBody.Add("phoneNumbers", phoneNumbers);
             if (extension != null) postBody.Add("extension", extension);
             if (locationId != null) postBody.Add("locationId", locationId);
+
 
             return await PostItemAsync<Person>(path, postBody);
         }
@@ -105,7 +110,7 @@ namespace SparkDotNet
         public async Task<Person> CreatePersonAsync(Person person, bool? callingData = false)
         {
             return await CreatePersonAsync(person.emails, person.displayName, person.firstName, person.lastName, person.avatar, person.orgId,
-                                           person.roles, person.licenses, callingData, person.Extension, person.LocationId);
+                                           person.roles, person.licenses, callingData, person.PhoneNumbers, person.Extension, person.LocationId);
         }
 
         /// <summary>
@@ -150,7 +155,8 @@ namespace SparkDotNet
         /// <returns>Person object.</returns>
         public async Task<Person> UpdatePersonAsync(string personId, string[] emails = null, string orgId = null, string[] roles = null,
                                                     string displayName = null, string firstName = null, string lastName = null, string avatar = null,
-                                                    string[] licenses = null, bool? callingData = null, string extension = null)
+                                                    string[] licenses = null, bool? callingData = null, PhoneNumber[] phoneNumbers = null,
+                                                    string extension = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (callingData != null) queryParams.Add("callingData", callingData.ToString());
@@ -166,6 +172,7 @@ namespace SparkDotNet
             if (orgId != null) putBody.Add("orgId", orgId);
             if (roles != null) putBody.Add("roles", roles);
             if (licenses != null) putBody.Add("licenses", licenses);
+            if (phoneNumbers != null) putBody.Add("phoneNumbers", phoneNumbers);
             if (extension != null) putBody.Add("extension", extension);
             
             return await UpdateItemAsync<Person>(path, putBody);
@@ -181,7 +188,7 @@ namespace SparkDotNet
         public async Task<Person> UpdatePersonAsync(Person person, bool? callingData = null)
         {
             return await UpdatePersonAsync(person.id, person.emails, person.orgId, person.roles, person.displayName, person.firstName, person.lastName,
-                                           person.avatar, person.licenses, callingData, person.Extension);
+                                           person.avatar, person.licenses, callingData, person.PhoneNumbers, person.Extension);
         }
 
     }
