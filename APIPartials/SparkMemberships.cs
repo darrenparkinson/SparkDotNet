@@ -90,13 +90,25 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="membershipId">The unique identifier for the membership.</param>
         /// <param name="isModerator">Whether or not the participant is a room moderator.</param>
+        /// <param name="isRoomHidden">Whether or not the room is hidden in the Webex Teams clients.</param>
         /// <returns>Membership object.</returns>
-        public async Task<Membership> UpdateMembershipAsync(string membershipId, bool isModerator)
+        public async Task<Membership> UpdateMembershipAsync(string membershipId, bool isModerator, bool isRoomHidden)
         {
             var putBody = new Dictionary<string, object>();
             putBody.Add("isModerator",isModerator);
+            putBody.Add("isRoomHidden", isRoomHidden);
             var path = $"{membershipsBase}/{membershipId}";
             return await UpdateItemAsync<Membership>(path, putBody);
+        }
+
+        /// <summary>
+        /// Updates properties for a membership by object.
+        /// </summary>
+        /// <param name="membership">The membership object to be updatad.</param>
+        /// <returns>Membership object.</returns>
+        public async Task<Membership> UpdateMembershipAsync(Membership membership)
+        {
+            return await UpdateMembershipAsync(membership.id, membership.isModerator, membership.isRoomHidden);
         }
     }
 }
