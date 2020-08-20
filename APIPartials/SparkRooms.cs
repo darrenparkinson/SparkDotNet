@@ -23,7 +23,7 @@ namespace SparkDotNet
             var queryParams = new Dictionary<string, string>();
             if (teamId != null) queryParams.Add("teamId",teamId);
             if (type != null) queryParams.Add("type",type);
-            if (max > 0) queryParams.Add("max",max.ToString());
+            if (max > 0) queryParams.Add("max", System.Math.Max(max, 1000).ToString());
             if (sortBy != null) queryParams.Add("sortBy", sortBy);
 
             var path = getURL(roomsBase, queryParams);

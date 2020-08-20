@@ -29,7 +29,7 @@ namespace SparkDotNet
             if (resource != null) queryParams.Add("resource", resource);
             if (type != null) queryParams.Add("type", type);
             if (actorId != null) queryParams.Add("actorId", actorId);
-            if (max > 0) queryParams.Add("max", max.ToString());
+            if (max > 0) queryParams.Add("max", System.Math.Max(max, 1000).ToString());
             if (from != null) queryParams.Add("from", ((DateTime)from).ToString("o"));
             if (to != null) queryParams.Add("to", ((DateTime)to).ToString("o"));
             
