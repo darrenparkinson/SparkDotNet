@@ -21,6 +21,13 @@ namespace SparkDotNet
         public string roomId { get; set; }
 
         /// <summary>
+        /// The type of room the membership is associated with.
+        /// direct: 1:1 room
+        /// group: group room
+        /// </summary>
+        public string roomType { get; set; }
+
+        /// <summary>
         /// The person ID.
         /// </summary>
         public string personId { get; set; }
@@ -44,6 +51,11 @@ namespace SparkDotNet
         /// Whether or not the participant is a room moderator.
         /// </summary>
         public bool isModerator { get; set; }
+
+        /// <summary>
+        /// Whether or not the room is hidden in the Webex Teams clients.
+        /// </summary>
+        public bool isRoomHidden { get; set; }
 
         /// <summary>
         /// The date and time when the membership was created.
