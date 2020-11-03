@@ -25,7 +25,7 @@ namespace SparkDotNet
             var queryParams = new Dictionary<string, string>();
             if (email != null) queryParams.Add("email",email);
             if (displayName != null) queryParams.Add("displayName",displayName);
-            if (id != null) queryParams.Add("id", string.Join(",", ids);
+            if (ids != null) queryParams.Add("id", string.Join(",", ids));
             if (orgId != null) queryParams.Add("orgId", orgId);
             if (max > 0) queryParams.Add("max",max.ToString());
             if (callingData != null) queryParams.Add("callingData", callingData.ToString());

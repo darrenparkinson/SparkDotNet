@@ -48,9 +48,9 @@ namespace SparkDotNet
         /// <param name="to">Ending date and time (exclusive) for List recordings to return, in any ISO 8601 compliant format. to cannot be after current date and time or before from. Default: Current date and time</param>
         /// <param name="meeting">Meeting object for the parent meeting series, scheduled meeting or meeting instance for which recordings are being requested. If a meeting is specified, the operation returns an array of recordings for the specified meeting series; if a scheduled meeting ID is specified, the operation returns an array of recordings for the specified scheduled meeting; if a meeting instance ID is specified, the operation returns an array of recordings for the specified meeting instance. If not specified, the operation returns an array of recordings for all meetings of the current user.</param>
         /// <returns></returns>
-        public async Task<List<Recording>> GetRecordingsAsync(int max = 0, DateTime? from = null, DateTime? to = null, Meeting meeting)
+        public async Task<List<Recording>> GetRecordingsAsync(int max = 0, DateTime? from = null, DateTime? to = null, Meeting meeting = null)
         {
-            return await GetRecordingsAsync(max, from, to, meeting.Id);
+            return await GetRecordingsAsync(max, from, to, meeting == null ? null : meeting.Id);
         }
 
         /// <summary>
