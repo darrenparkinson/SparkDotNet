@@ -13,22 +13,24 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="email">List people with this email address. For non-admin requests, either this or displayName are required.</param>
         /// <param name="displayName">List people whose name starts with this string. For non-admin requests, either this or email are required.</param>
-        /// <param name="id">List people by ID. Accepts up to 85 person IDs separated by commas. If this parameter is provided then presence information (such as the lastActivity or status properties) will not be included in the response.</param>
+        /// <param name="ids">List people by ID. Accepts up to 85 person IDs. If this parameter is provided then presence information (such as the lastActivity or status properties) will not be included in the response unless showAllTypes is set to true.</param>
         /// <param name="orgId">List people in this organization. Only admin users of another organization (such as partners) may use this parameter.</param>
         /// <param name="max">Limit the maximum number of people in the response. Default: 100</param>
         /// <param name="callingData">Include BroadCloud user details in the response. Default: false</param>
         /// <param name="locationId">List people present in this location.</param>
+        /// <param name="showAllTypes">If the status is removed due to performance issues (ie. when querying via orgId or ids), it can be forced to be returned anyway by setting this to true</param>
         /// <returns>List of People objects.</returns>
-        public async Task<List<Person>> GetPeopleAsync(string email = null, string displayName = null, string id = null, string orgId = null, int max = 0, bool? callingData = null, string locationId = null)
+        public async Task<List<Person>> GetPeopleAsync(string email = null, string displayName = null, string[] ids = null, string orgId = null, int max = 0, bool? callingData = null, string locationId = null, bool? showAllTypes = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (email != null) queryParams.Add("email",email);
             if (displayName != null) queryParams.Add("displayName",displayName);
-            if (id != null) queryParams.Add("id", id);
+            if (ids != null) queryParams.Add("id", string.Join(",", ids));
             if (orgId != null) queryParams.Add("orgId", orgId);
             if (max > 0) queryParams.Add("max",max.ToString());
             if (callingData != null) queryParams.Add("callingData", callingData.ToString());
             if (locationId != null) queryParams.Add("locationId", locationId);
+            if (showAllTypes != null) queryParams.Add("showAllTypes", showAllTypes.ToString());
             var path = getURL(peopleBase, queryParams);
             return await GetItemsAsync<Person>(path);
         }
