@@ -59,5 +59,11 @@ namespace SparkDotNet
         /// The ID of the organization which owns this room. See Webex Teams Data in the Compliance Guide for more information.
         /// </summary>
         public string OwnerId { get; set; }
+
+        /// <summary>
+        /// Space classification id represents the space's current classification.
+        /// It can be attached during space creation time, and can be modified at the request of an authorized user.
+        /// </summary>
+        public string ClassificationId { get; set; }
     }
 }

@@ -61,12 +61,14 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="title">A user-friendly name for the room.</param>
         /// <param name="teamId">The ID for the team with which this room is associated.</param>
+        /// <param name="classificationId">Space classification id represents the space's current classification. It can be attached during space creation time, and can be modified at the request of an authorized user.</param>
         /// <returns>Room object.</returns>
-        public async Task<Room> CreateRoomAsync(string title, string teamId = null)
+        public async Task<Room> CreateRoomAsync(string title, string teamId = null, string classificationId = null)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("title", title);
             if (teamId != null) { postBody.Add("teamId", teamId); }
+            if (classificationId != null) { postBody.Add("classificationId", classificationId); }
             return await PostItemAsync<Room>(roomsBase, postBody);
         }
 
@@ -100,12 +102,23 @@ namespace SparkDotNet
         /// <param name="roomId">The unique identifier for the room.</param>
         /// <param name="title">A user-friendly name for the room.</param>
         /// <returns>The updated room object</returns>
-        public async Task<Room> UpdateRoomAsync(string roomId, string title)
+        public async Task<Room> UpdateRoomAsync(string roomId, string title, string classificationId = null)
         {
             var putBody = new Dictionary<string, object>();
             putBody.Add("title",title);
+            if (classificationId != null) putBody.Add("classificationId", classificationId);
             var path = $"{roomsBase}/{roomId}";
             return await UpdateItemAsync<Room>(path, putBody);
+        }
+
+        /// <summary>
+        /// Updates details for a room, by Object.
+        /// </summary>
+        /// <param name="room">The room object to be updated.</param>
+        /// <returns>The udated room object</returns>
+        public async Task<Room> UpdateRoomAsync(Room room)
+        {
+            return await UpdateRoomAsync(room.id, room.title, room.ClassificationId);
         }
     }
 
