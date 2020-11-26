@@ -48,6 +48,6 @@ namespace SparkDotNet {
         /// The event’s data representation.
         /// This object will contain the event's resource, such as memberships or messages, at the time the event took place.
         /// </summary>
-        public EventData[] Data { get; set; }
+        public EventData Data { get; set; }
     }
 }
