@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string resourceGroupsBase = "/v1/resourceGroups";
+        private readonly string resourceGroupsBase = "/v1/resourceGroups";
 
         /// <summary>
         /// ist resource groups.

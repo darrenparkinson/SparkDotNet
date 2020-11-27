@@ -7,7 +7,7 @@ namespace SparkDotNet
 
     public partial class Spark
     {
-        private string locationsBase = "/v1/locations";
+        private readonly string locationsBase = "/v1/locations";
 
         /// <summary>
         /// List locations for an organization.

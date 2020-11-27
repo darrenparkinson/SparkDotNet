@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string messagesBase = "/v1/messages";
+        private readonly string messagesBase = "/v1/messages";
 
         /// <summary>
         /// Lists all messages in a room with roomType. If present, includes the associated media content attachment for each message. The roomType could be a group or direct(1:1).

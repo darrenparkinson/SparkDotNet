@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string workspacesBase = "/v1/workspaces";
+        private readonly string workspacesBase = "/v1/workspaces";
 
         /// <summary>
         /// List workspaces.

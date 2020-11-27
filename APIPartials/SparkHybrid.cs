@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string hybridBase = "/v1/hybrid";
+        private readonly string hybridBase = "/v1/hybrid";
 
         #region HybridConnector
         /// <summary>

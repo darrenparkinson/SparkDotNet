@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string roomsBase = "/v1/rooms";
+        private readonly string roomsBase = "/v1/rooms";
 
         /// <summary>
         /// By default, lists rooms to which the authenticated user belongs.

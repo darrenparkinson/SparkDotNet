@@ -9,7 +9,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string meetingsBase = "/v1/meetings";
+        private readonly string meetingsBase = "/v1/meetings";
 
 
         /// <summary>

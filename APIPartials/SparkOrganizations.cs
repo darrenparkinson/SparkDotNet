@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string organizationsBase = "/v1/organizations";
+        private readonly string organizationsBase = "/v1/organizations";
 
         /// <summary>
         /// List all organizations visible by your account.

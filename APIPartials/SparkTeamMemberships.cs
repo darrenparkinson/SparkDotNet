@@ -7,7 +7,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string teamMembershipsBase = "/v1/team/memberships";
+        private readonly string teamMembershipsBase = "/v1/team/memberships";
 
         /// <summary>
         /// Lists all team memberships. By default, lists memberships for teams to which the authenticated user belongs.

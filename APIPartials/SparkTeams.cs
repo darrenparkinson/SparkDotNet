@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string teamsBase = "/v1/teams";
+        private readonly string teamsBase = "/v1/teams";
 
         /// <summary>
         /// Lists teams to which the authenticated user belongs.

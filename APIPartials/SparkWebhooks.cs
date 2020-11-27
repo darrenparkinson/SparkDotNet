@@ -7,7 +7,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string webhooksBase = "/v1/webhooks";
+        private readonly string webhooksBase = "/v1/webhooks";
 
         /// <summary>
         /// Lists all of your webhooks.

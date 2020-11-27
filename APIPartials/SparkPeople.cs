@@ -6,7 +6,7 @@ namespace SparkDotNet
 
     public partial class Spark
     {
-        private string peopleBase = "/v1/people";
+        private readonly string peopleBase = "/v1/people";
 
         /// <summary>
         /// List people in your organization.
