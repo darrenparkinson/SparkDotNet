@@ -54,14 +54,27 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="roomId">A unique identifier for the room.</param>
         /// <param name="contentUrl">Content Url of the Room Tab. Needs to use the https protocol.</param>
+        /// <param name="displayName">Display name of the Room tab.</param>
         /// <returns>The newly created Room Tab object.</returns>
-        public async Task<RoomTab> CreateRoomTabAsync(string roomId, string contentUrl)
+        public async Task<RoomTab> CreateRoomTabAsync(string roomId, string contentUrl, string displayName)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("roomId", roomId);
             postBody.Add("contentUrl", contentUrl);
-            
+            postBody.Add("displayName", displayName);
+
             return await PostItemAsync<RoomTab>(roomTabsBase, postBody);
+        }
+
+        /// <summary>
+        /// Add a tab with a content url to a room that can be accessed in the room.
+        /// </summary>
+        /// <param name="roomTab">The Room Tab object to be created</param>
+        /// <returns>The newly created Room Tab object.</returns>
+        /// <returns></returns>
+        public async Task<RoomTab> CreateRoomTabAsync(RoomTab roomTab)
+        {
+            return await CreateRoomTabAsync(roomTab.RoomId, roomTab.ContentUrl, roomTab.DisplayName);
         }
 
         /// <summary>
