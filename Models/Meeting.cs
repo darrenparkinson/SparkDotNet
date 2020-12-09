@@ -61,6 +61,13 @@ namespace SparkDotNet
         public string Password { get; set; }
 
         /// <summary>
+        /// 8-digit numeric password to join meeting from audio and video devices.
+        /// This attribute applies to meeting series, scheduled meeting and in-progress meeting instance,
+        /// but it does not apply to meeting instances which have ended.
+        /// </summary>
+        public string PhoneAndVideoSystemPassword  { get; set; }
+
+        /// <summary>
         /// Meeting type.
         /// meetingSeries: Master of a scheduled series of meetings which consists of one or more scheduled meeting based on a recurrence rule.
         /// scheduledMeeting: Instance from a master meeting series.
@@ -135,6 +142,11 @@ namespace SparkDotNet
         /// Key for joining meeting as host.
         /// </summary>
         public string HostKey { get; set; }
+
+        /// <summary>
+        /// Site URL for the meeting.
+        /// </summary>
+        public string SiteUrl { get; set; }
 
         /// <summary>
         /// Link to meeting information page where meeting client will be launched if the meeting is ready for start or join.

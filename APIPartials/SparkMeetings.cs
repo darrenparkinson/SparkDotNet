@@ -30,11 +30,13 @@ namespace SparkDotNet
         /// <param name="from">Start date and time (inclusive) in any ISO 8601 compliant format for the meeting objects being requested. Default: Current date and time</param>
         /// <param name="to">End date and time (exclusive) in any ISO 8601 compliant format for the meeting objects being requested. Default: If `from` is specified, the default value is `from` plus 7 days; if `from` is not specified, the default value is current date and time plus 7 days.</param>
         /// <param name="max">Limit the maximum number of meetings in the response, up to 100. Default: 10</param>
+        /// <param name="hostEmail">Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes. If set, the admin may specify the email of a user in a site they manage and the API will return details for meetings that are hosted by that user.</param>
+        /// <param name="siteUrl">URL of the Webex site which the API lists meetings from. If not specified, the API lists meetings from user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
         /// <returns>A list of Meeting objects</returns>
         public async Task<List<Meeting>> GetMeetingsAsync(string meetingNumber = null, string webLink = null, string meethingType = null,
                                                           string state = null, string participantEmail = null, bool? current = null,
                                                           string from = null, string to = null,
-                                                          int max = 0)
+                                                          int max = 0, string hostEmail = null, string siteUrl = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (meetingNumber != null) queryParams.Add("meetingNumber", meetingNumber);
@@ -46,6 +48,8 @@ namespace SparkDotNet
             if (from != null) queryParams.Add("from", from);
             if (to != null) queryParams.Add("to", to);
             if (max > 0) queryParams.Add("max", max.ToString());
+            if (hostEmail != null) queryParams.Add("hostEmail", hostEmail);
+            if (siteUrl != null) queryParams.Add("siteUrl", siteUrl);
 
             var path = getURL(meetingsBase, queryParams);
             return await GetItemsAsync<Meeting>(path);
@@ -60,11 +64,15 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="meetingId">Unique identifier for the meeting being requested.</param>
         /// <param name="current">Whether or not to retrieve only the current scheduled meeting of the meeting series, i.e. the meeting ready to join or start or the upcoming meeting of the meeting series. Default: false</param>
+        /// <param name="hostEmail">Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes. If set, the admin may specify the email of a user in a site they manage and the API will return details for a meeting that is hosted by that user.</param>
+        /// <param name="siteUrl">Webex site URL to query. If siteUrl is not specified, the users' preferred site will be used. If the authorization token has the admin-level scopes, the admin can set the Webex site URL on behalf of the user specified in the hostEmail parameter.</param>
         /// <returns></returns>
-        public async Task<Meeting> GetMeetingAsync(string meetingId, bool? current = null)
+        public async Task<Meeting> GetMeetingAsync(string meetingId, bool? current = null, string hostEmail = null, string siteUrl = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (current != null) queryParams.Add("current", current.ToString());
+            if (hostEmail != null) queryParams.Add("hostEmail", hostEmail);
+            if (siteUrl != null) queryParams.Add("siteUrl", siteUrl);
 
             var path = getURL($"{meetingsBase}/{meetingId}", queryParams);
             return await GetItemAsync<Meeting>(path);
@@ -87,22 +95,53 @@ namespace SparkDotNet
         /// <param name="invitees">Invitees for meeting.</param>
         /// <returns>The new created Meeting object.</returns>
         public async Task<Meeting> CreateMeetingAsync(string title, string password, DateTime start, DateTime end,
-                                                    bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost, 
+                                                    bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
                                                     string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
                                                     MeetingInvitee[] invitees = null)
         {
+            return await CreateMeetingAsync(title, start, end, enabledAutoRecordMeeting, allowAnyUserToBeCoHost, password);
+        }
+
+        /// <summary>
+        /// Creates a new meeting.
+        /// If the value of the parameter recurrence is null, a non-recurring meeting is created.
+        /// If the parameter recurrence has a value, a recurring meeting is created based on the rule defined by the value of recurrence.
+        /// If the parameter siteUrl has a value, the meeting is created on the specified site. Otherwise, the meeting is created on the user's preferred site.
+        /// All available Webex sites and preferred site of the user can be retrieved by Get Site List API.
+        /// </summary>
+        /// <param name="title">Meeting title.</param>
+        /// <param name="password">Meeting password.</param>
+        /// <param name="start">Date and time for the start of meeting in any ISO 8601 compliant format. start cannot be before current date and time or after end. Duration between start and end cannot be shorter than 10 minutes or longer than 24 hours.</param>
+        /// <param name="end">Date and time for the end of meeting in any ISO 8601 compliant format. end cannot be before current date and time or before start. Duration between start and end cannot be shorter than 10 minutes or longer than 24 hours.</param>
+        /// <param name="enabledAutoRecordMeeting">Whether or not meeting is recorded automatically.</param>
+        /// <param name="allowAnyUserToBeCoHost">Whether or not to allow any invitee to be a cohost.</param>
+        /// <param name="agenda">Meeting agenda. The agenda can be a maximum of 2500 characters long.</param>
+        /// <param name="timezone">Time zone in which meeting was originally scheduled (conforming with the IANA time zone database).</param>
+        /// <param name="recurrence">Meeting series recurrence rule (conforming with RFC 2445), applying only to meeting series. This attribute is not allowed for a scheduled meeting or a meeting instance that is happening or has happended.</param>
+        /// <param name="invitees">Invitees for meeting.</param>
+        /// <param name="hostEmail">Email address for the meeting host. This attribute should only be set if the user or application calling the API has the admin-level scopes. When used, the admin may specify the email of a user in a site they manage to be the meeting host.</param>
+        /// <param name="siteUrl">URL of the Webex site which the meeting is created on. If not specified, the meeting is created on user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
+        /// <returns>The new created Meeting object.</returns>
+        public async Task<Meeting> CreateMeetingAsync(string title, DateTime start, DateTime end,
+                                                    bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
+                                                    string password = null, string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
+                                                    MeetingInvitee[] invitees = null, string hostEmail = null,
+                                                    string siteUrl = null)
+        {
             var bodyParameters = new Dictionary<string, object>();
             bodyParameters.Add("title", title);
-            bodyParameters.Add("password", password);
             bodyParameters.Add("start", start);
             bodyParameters.Add("end", end);
             bodyParameters.Add("enabledAutoRecordMeeting", enabledAutoRecordMeeting);
             bodyParameters.Add("allowAnyUserToBeCoHost", allowAnyUserToBeCoHost);
 
+            if (password != null) bodyParameters.Add("password", password);
             if (agenda != null) bodyParameters.Add("agenda", agenda);
             if (timezone != null) bodyParameters.Add("timezone", timezone);
             if (recurrence != null) bodyParameters.Add("recurrence", recurrence);
             if (invitees != null) bodyParameters.Add("invitees", invitees);
+            if (hostEmail != null) bodyParameters.Add("hostEmail", hostEmail);
+            if (siteUrl != null) bodyParameters.Add("siteUrl", siteUrl);
 
             return await PostItemAsync<Meeting>(meetingsBase, bodyParameters);
         }
@@ -117,9 +156,9 @@ namespace SparkDotNet
         /// <returns>The new created Meeting object.</returns>
         public async Task<Meeting> CreateMeetingAsync(Meeting meeting, MeetingInvitee[] invitees = null)
         {
-            return await CreateMeetingAsync(meeting.Title, meeting.Password, meeting.Start, meeting.End, meeting.EnabledAutoRecordMeeting,
-                                            meeting.AllowAnyUserToBeCoHost, meeting.Agenda, meeting.Timezone, meeting.Recurrence,
-                                            invitees);
+            return await CreateMeetingAsync(meeting.Title, meeting.Start, meeting.End, meeting.EnabledAutoRecordMeeting,
+                                            meeting.AllowAnyUserToBeCoHost, meeting.Password, meeting.Agenda, meeting.Timezone, meeting.Recurrence,
+                                            invitees, meeting.HostEmail, meeting.SiteUrl);
         }
 
         /// <summary>
@@ -128,10 +167,18 @@ namespace SparkDotNet
         /// If the meetingId value specified is for a meeting series, the operation deletes the entire meeting series.
         /// </summary>
         /// <param name="meetingId">Unique identifier for the meeting to be deleted.</param>
+        /// <param name="hostEmail">Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes. If set, the admin may specify the email of a user in a site they manage and the API will delete a meeting that is hosted by that user.</param>
+        /// <param name="siteUrl">Webex site URL to query. If siteUrl is not specified, the users' preferred site will be used. If the authorization token has the admin-level scopes, the admin can set the Webex site URL on behalf of the user specified in the hostEmail parameter.</param>
         /// <returns>true if the Meeting was deleted, false otherwise</returns>
-        public async Task<bool> DeleteMeetingAsync(string meetingId)
+        public async Task<bool> DeleteMeetingAsync(string meetingId, string hostEmail = null, string siteUrl = null)
         {
-            return await DeleteItemAsync($"{meetingsBase}/{meetingId}");
+            var queryParams = new Dictionary<string, string>();
+            if (hostEmail != null) queryParams.Add("hostEmail", hostEmail);
+            if (siteUrl != null) queryParams.Add("siteUrl", siteUrl);
+
+            var path = getURL($"{meetingsBase}/{meetingId}", queryParams);
+
+            return await DeleteItemAsync(path);
         }
 
         /// <summary>
@@ -143,7 +190,7 @@ namespace SparkDotNet
         /// <returns>true if the Meeting was deleted, false otherwise</returns>
         public async Task<bool> DeleteMeetingAsync(Meeting meeting)
         {
-            return await DeleteMeetingAsync(meeting.Id);
+            return await DeleteMeetingAsync(meeting.Id, meeting.HostEmail, meeting.SiteUrl);
         }
 
         /// <summary>
@@ -158,9 +205,12 @@ namespace SparkDotNet
         /// <param name="state">Meeting state for the meetings being requested. If not specified, return meetings of all states. Possible values: active, scheduled, ready, lobby, inProgress, ended, missed, expired</param>
         /// <param name="isModified">Flag identifying whether or not only to retrieve scheduled meeting instances which have been modified. This parameter only applies to scheduled meetings. If isModified value is true, only return modified scheduled meeting instances; if isModified value is false, only return unmodified scheduled meeting instances; if isModified is not specified, return all scheduled meeting and meeting instances.</param>
         /// <param name="max">Limit the maximum number of meetings in the response, up to 100. Default: 10</param>
+        /// <param name="hostEmail">Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes. If set, the admin may specify the email of a user in a site they manage and the API will return details for meetings that are hosted by that user.</param>
+        /// <param name="siteUrl">URL of the Webex site which the API lists meetings from. If not specified, the API lists meetings from user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
         /// <returns>A list of Meeting objects of the given meetin series</returns>
         public async Task<List<Meeting>> GetMeetingsOfSeriesAsync(string meetingSeriesId, DateTime? from = null, DateTime? to = null,
-                                                                  string state = null, bool? isModified = null, int max = 0 )
+                                                                  string state = null, bool? isModified = null, int max = 0,
+                                                                  string hostEmail = null, string siteUrl = null)
         {
             var queryParams = new Dictionary<string, string>();
             queryParams.Add("meetingSeriesId", meetingSeriesId);
@@ -170,6 +220,8 @@ namespace SparkDotNet
             if (state != null) queryParams.Add("state", state);
             if (isModified != null) queryParams.Add("isModified", isModified.ToString());
             if (max > 0) queryParams.Add("max", max.ToString());
+            if (hostEmail != null) queryParams.Add("hostEmail", hostEmail);
+            if (siteUrl != null) queryParams.Add("siteUrl", siteUrl);
 
             var path = getURL($"{meetingsBase}", queryParams);
             return await GetItemsAsync<Meeting>(path);
@@ -188,10 +240,13 @@ namespace SparkDotNet
         /// <param name="agenda">Meeting agenda. The agenda can be a maximum of 2500 characters long.</param>
         /// <param name="timezone">Time zone in which meeting was originally scheduled (conforming with the IANA time zone database).</param>
         /// <param name="recurrence">Meeting series recurrence rule (conforming with RFC 2445), applying only to meeting series. This attribute is not allowed for a scheduled meeting or a meeting instance that is happening or has happended.</param>
+        /// <param name="hostEmail">Email address for the meeting host. This attribute should only be set if the user or application calling the API has the admin-level scopes. When used, the admin may specify the email of a user in a site they manage to be the meeting host.</param>
+        /// <param name="siteUrl">URL of the Webex site which the meeting is updated on. If not specified, the meeting is created on user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
         /// <returns>The updated Meeting object.</returns>
         public async Task<Meeting> UpdateMeetingAsync(string meetingId, string title, string password, DateTime start, DateTime end,
                                             bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
-                                            string agenda = null, TimeZoneInfo timezone = null, string recurrence = null)
+                                            string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
+                                            string hostEmail = null, string siteUrl = null)
         {
             var bodyParameters = new Dictionary<string, object>();
             bodyParameters.Add("title", title);
@@ -204,6 +259,8 @@ namespace SparkDotNet
             if (agenda != null) bodyParameters.Add("agenda", agenda);
             if (timezone != null) bodyParameters.Add("timezone", timezone);
             if (recurrence != null) bodyParameters.Add("recurrence", recurrence);
+            if (hostEmail != null) bodyParameters.Add("hostEmail", hostEmail);
+            if (siteUrl != null) bodyParameters.Add("siteUrl", siteUrl);
 
             return await PostItemAsync<Meeting>($"{meetingsBase}/{meetingId}", bodyParameters);
         }
@@ -217,7 +274,7 @@ namespace SparkDotNet
         {
             return await UpdateMeetingAsync(meeting.Id, meeting.Title, meeting.Password, meeting.Start, meeting.End,
                                             meeting.EnabledAutoRecordMeeting, meeting.AllowAnyUserToBeCoHost, meeting.Agenda,
-                                            meeting.Timezone, meeting.Recurrence);
+                                            meeting.Timezone, meeting.Recurrence, meeting.HostEmail, meeting.SiteUrl);
         }
 
 
