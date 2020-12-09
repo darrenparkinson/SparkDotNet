@@ -158,14 +158,14 @@ namespace SparkDotNet
             return returnItem;
         }
 
-        private async Task<List<T>> GetItemsAsync<T>(string path)
+        private async Task<List<T>> GetItemsAsync<T>(string path, string rootElementName = "items")
         {
             List<T> items = new List<T>();
             HttpResponseMessage response = await client.GetAsync(path);
             if (response.IsSuccessStatusCode)
             {
                 JObject requestResult = JObject.Parse(await response.Content.ReadAsStringAsync());
-                List<JToken> results = requestResult["items"].Children().ToList();
+                List<JToken> results = requestResult[rootElementName].Children().ToList();
                 foreach (JToken result in results)
                 {
                     T item = DeserializeObject<T>(result.ToString());
