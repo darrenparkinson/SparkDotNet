@@ -148,7 +148,7 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 28 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
+There are 31 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
 
 * [Admin Audit Events](https://developer.webex.com/docs/api/v1/admin-audit-events)
 * [Attachment Actions](https://developer.webex.com/docs/api/v1/attachment-actions)
@@ -160,6 +160,7 @@ There are 28 endpoints covered by this library. Please refer to the Cisco docume
 * [Licenses](https://developer.webex.com/docs/api/v1/licenses)
 * [Locations](https://developer.webex.com/docs/api/v1/locations)
 * [Meeting Invitees](https://developer.webex.com/docs/api/v1/meeting-invitees)
+* [Meeting Preferences (partially)](https://developer.webex.com/docs/api/v1/meeting-preferences)
 * [Meetings](https://developer.webex.com/docs/api/v1/meetings)
 * [Memberships](https://developer.webex.com/docs/api/v1/memberships)
 * [Messages](https://developer.webex.com/docs/api/v1/messages)
@@ -167,6 +168,8 @@ There are 28 endpoints covered by this library. Please refer to the Cisco docume
 * [People](https://developer.webex.com/docs/api/v1/people)
 * [Places](https://developer.webex.com/docs/api/v1/places)
 * [Recordings](https://developer.webex.com/docs/api/v1/recordings)
+* [Report Templates](https://developer.webex.com/docs/api/v1/report-templates)
+* [Reports](https://developer.webex.com/docs/api/v1/reports)
 * [Resource Group Membership](https://developer.webex.com/docs/api/v1/resource-group-memberships)
 * [Resource Groups](https://developer.webex.com/docs/api/v1/resource-groups)
 * [Roles](https://developer.webex.com/docs/api/v1/roles)
