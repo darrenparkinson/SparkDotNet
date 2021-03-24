@@ -31,10 +31,7 @@ namespace SparkDotNet
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
         }
 
-
-
         #region Private Helper Methods
-
 
         private async Task<bool> DeleteItemAsync(string path)
         {
@@ -49,11 +46,8 @@ namespace SparkDotNet
             }
         }
 
-
         private async Task<T> PostItemAsync<T>(string path, Dictionary<string, object> bodyParams)
         {
-            T returnItem = (T)System.Activator.CreateInstance(typeof(T));
-
             HttpContent content;
 
             if (bodyParams.ContainsKey("files") && IsLocalPath(bodyParams["files"]))
@@ -97,17 +91,11 @@ namespace SparkDotNet
             }
 
             HttpResponseMessage response = await client.PostAsync(path, content);
-            if (response.IsSuccessStatusCode)
-            {
-                returnItem = DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-            }
-            else
-            {
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
-            }
-            return returnItem;
+            await CheckForErrorResponse(response);
 
+            return DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
+
         private string getURL(string path, Dictionary<string, string> dict)
         {
             UriBuilder uriBuilder = new UriBuilder(baseURL);
@@ -129,54 +117,35 @@ namespace SparkDotNet
 
         private async Task<T> UpdateItemAsync<T>(string path, Dictionary<string, object> bodyParams)
         {
-            T returnItem = (T)System.Activator.CreateInstance(typeof(T));
             var jsonBody = JsonConvert.SerializeObject(bodyParams);
             StringContent content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
             HttpResponseMessage response = await client.PutAsync(path, content);
-            if (response.IsSuccessStatusCode)
-            {
-                returnItem = DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-            }
-            else
-            {
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
-            }
-            return returnItem;
+            await CheckForErrorResponse(response);
+
+            return DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
+
         private async Task<T> GetItemAsync<T>(string path)
         {
-            T returnItem = (T)System.Activator.CreateInstance(typeof(T));
             HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {
-                returnItem = DeserializeObject<T>(await response.Content.ReadAsStringAsync());
-            }
-            else
-            {
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
-            }
-            return returnItem;
+            await CheckForErrorResponse(response);
+
+            return DeserializeObject<T>(await response.Content.ReadAsStringAsync());
         }
 
         private async Task<List<T>> GetItemsAsync<T>(string path)
         {
-            List<T> items = new List<T>();
             HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
-            {
-                JObject requestResult = JObject.Parse(await response.Content.ReadAsStringAsync());
-                List<JToken> results = requestResult["items"].Children().ToList();
-                foreach (JToken result in results)
-                {
-                    T item = DeserializeObject<T>(result.ToString());
-                    items.Add(item);
-                }
-            }
-            else
-            {
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
-            }
+            await CheckForErrorResponse(response);
 
+            List<T> items = new List<T>();
+            JObject requestResult = JObject.Parse(await response.Content.ReadAsStringAsync());
+            List<JToken> results = requestResult["items"].Children().ToList();
+            foreach (JToken result in results)
+            {
+                T item = DeserializeObject<T>(result.ToString());
+                items.Add(item);
+            }
             return items;
         }
 
@@ -197,61 +166,65 @@ namespace SparkDotNet
 
         public async Task<PaginationResult<T>> GetItemsWithLinksAsync<T>(string path)
         {
+            HttpResponseMessage response = await client.GetAsync(path);
+            await CheckForErrorResponse(response);
+
             PaginationResult<T> paginationResult = new PaginationResult<T>();
             List<T> items = new List<T>();
             Links links = new Links();
-            HttpResponseMessage response = await client.GetAsync(path);
-            if (response.IsSuccessStatusCode)
+            JObject requestResult = JObject.Parse(await response.Content.ReadAsStringAsync());
+            List<JToken> results = requestResult["items"].Children().ToList();
+            foreach (JToken result in results)
             {
-                JObject requestResult = JObject.Parse(await response.Content.ReadAsStringAsync());
-                List<JToken> results = requestResult["items"].Children().ToList();
-                foreach (JToken result in results)
+                T item = DeserializeObject<T>(result.ToString());
+                items.Add(item);
+            }
+            if (response.Headers.Contains("Link"))
+            {
+                var link = response.Headers.GetValues("Link").FirstOrDefault();
+                if (link != null && !"".Equals(link))
                 {
-                    T item = DeserializeObject<T>(result.ToString());
-                    items.Add(item);
-                }
-                if (response.Headers.Contains("Link"))
-                {
-                    var link = response.Headers.GetValues("Link").FirstOrDefault();
-                    if (link != null && !"".Equals(link))
+                    // borrowed regex from spark-java-sdk https://github.com/ciscospark/spark-java-sdk/blob/master/src/main/java/com/ciscospark/LinkedResponse.java
+                    Regex r = new Regex("\\s*<(\\S+)>\\s*;\\s*rel=\"(\\S+)\",?", RegexOptions.Compiled);
+                    MatchCollection regmatch = r.Matches(link);
+                    foreach (Match item in regmatch)
                     {
-                        // borrowed regex from spark-java-sdk https://github.com/ciscospark/spark-java-sdk/blob/master/src/main/java/com/ciscospark/LinkedResponse.java
-                        Regex r = new Regex("\\s*<(\\S+)>\\s*;\\s*rel=\"(\\S+)\",?", RegexOptions.Compiled);
-                        MatchCollection regmatch = r.Matches(link);
-                        foreach (Match item in regmatch)
-                        {
-                            var linktype = item.Groups[2].ToString().ToLower();
-                            Uri linkUrl = new Uri(item.Groups[1].ToString());
+                        var linktype = item.Groups[2].ToString().ToLower();
+                        Uri linkUrl = new Uri(item.Groups[1].ToString());
 
-                            switch (linktype)
-                            {
-                                case "next":
-                                    links.Next = linkUrl.PathAndQuery;
-                                    break;
-                                case "prev":
-                                    links.Prev = linkUrl.PathAndQuery;
-                                    break;
-                                case "first":
-                                    links.First = linkUrl.PathAndQuery;
-                                    break;
-                                default:
-                                    break;
-                            }
+                        switch (linktype)
+                        {
+                            case "next":
+                                links.Next = linkUrl.PathAndQuery;
+                                break;
+                            case "prev":
+                                links.Prev = linkUrl.PathAndQuery;
+                                break;
+                            case "first":
+                                links.First = linkUrl.PathAndQuery;
+                                break;
+                            default:
+                                break;
                         }
                     }
                 }
-                paginationResult.Items = items;
-                paginationResult.Links = links;
             }
-            else
-            {
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
-            }
+            paginationResult.Items = items;
+            paginationResult.Links = links;
 
             return paginationResult;
         }
 
+        private async Task CheckForErrorResponse(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                return;
+            }
 
-
+            SparkErrorContent errorContent = DeserializeObject<SparkErrorContent>(await response.Content.ReadAsStringAsync());
+            string errorMessage = errorContent?.Message ?? response.ReasonPhrase;
+            throw new SparkException((int)response.StatusCode, errorMessage, errorContent, response.Headers);
+        }
     }
 }
