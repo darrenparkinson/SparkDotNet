@@ -46,7 +46,7 @@ namespace SparkDotNet {
 
         /// <summary>
         /// The event’s data representation.
-        /// This object will contain the event's resource, such as memberships or messages, at the time the event took place.
+        /// This object will contain the event's resource, such as memberships, messages, meetings, tabs, rooms or attachmentActions at the time the event took place.
         /// </summary>
         public EventData Data { get; set; }
     }
