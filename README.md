@@ -160,6 +160,7 @@ There are 31 endpoints covered by this library. Please refer to the Cisco docume
 * [Licenses](https://developer.webex.com/docs/api/v1/licenses)
 * [Locations](https://developer.webex.com/docs/api/v1/locations)
 * [Meeting Invitees](https://developer.webex.com/docs/api/v1/meeting-invitees)
+* [Meeting Participants](https://developer.webex.com/docs/api/v1/meeting-participants)
 * [Meeting Preferences (partially)](https://developer.webex.com/docs/api/v1/meeting-preferences)
 * [Meetings](https://developer.webex.com/docs/api/v1/meetings)
 * [Memberships](https://developer.webex.com/docs/api/v1/memberships)

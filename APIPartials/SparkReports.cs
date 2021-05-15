@@ -67,7 +67,7 @@ namespace SparkDotNet
         /// <param name="endDate">Data in the report will be till this date</param>
         /// <param name="siteList">Sites belonging to user's organization. This attribute is needed for site-based templates</param>
         /// <returns>A report object</returns>
-        public async Task<Report> CreateReportAsync(int templateId, DateTime? startDate = null, DateTime? endDate = null, string siteList)
+        public async Task<Report> CreateReportAsync(int templateId, DateTime? startDate = null, DateTime? endDate = null, string siteList = null)
         {
             var bodyParams = new Dictionary<string, object>();
             bodyParams.Add("templateId", templateId);
@@ -112,10 +112,10 @@ namespace SparkDotNet
         public async Task<string> DownloadReport(string reportUrl)
         {
             HttpResponseMessage response = await client.GetAsync(reportUrl);
-            if (response.IsSuccessStatusCode)
-                return await response.Content.ReadAsStringAsync();
-            else
-                throw new SparkException((int)response.StatusCode, $"{(int)response.StatusCode} ({response.ReasonPhrase})", response.Headers);
+
+            await CheckForErrorResponse(response);
+
+            return await response.Content.ReadAsStringAsync();
         }
    }
 
