@@ -277,6 +277,66 @@ namespace SparkDotNet
                                             meeting.Timezone, meeting.Recurrence, meeting.HostEmail, meeting.SiteUrl);
         }
 
+        /// <summary>
+        /// Get the meeting control of a live meeting, which is consisted of meeting control status on "locked" and "recording" to reflect whether the meeting is currently locked and there is recording in progress.
+        /// </summary>
+        /// <param name="meetingId">Unique identifier for the meeting.</param>
+        /// <returns>The controls status objects for the meeting</returns>
+        public async Task<MeetingControls> GetMeetingControlsAsync(string meetingId)
+        {
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("meetingId", meetingId);
+
+            var path = getURL($"{meetingsBase}/controls", queryParams);
+
+            return await GetItemAsync<MeetingControls>(path);
+        }
+
+        /// <summary>
+        /// Get the meeting control of a live meeting, which is consisted of meeting control status on "locked" and "recording" to reflect whether the meeting is currently locked and there is recording in progress.
+        /// </summary>
+        /// <param name="meeting">The meeting object.</param>
+        /// <returns>The controls status objects for the meeting</returns>
+        public async Task<MeetingControls> GetMeetingControlsAsync(Meeting meeting)
+        {
+            return await GetMeetingControlsAsync(meeting.Id);
+        }
+
+        /// <summary>
+        /// To start, pause, resume, or stop a meeting recording; To lock or unlock an on-going meeting.
+        /// </summary>
+        /// <param name="meetingId">Unique identifier for the meeting.</param>
+        /// <param name="recordingStarted">The value can be true or false. true means to start the recording, false to end the recording.</param>
+        /// <param name="recordingPaused">The value can be true or false, will be ignored if 'recordingStarted' sets to false, and true to resume the recording only if the recording is paused vise versa.</param>
+        /// <param name="locked">The value is true or false.</param>
+        /// <returns>The updated meeting state object</returns>
+        public async Task<MeetingControls> UpdateMeetingControlsAsync(string meetingId, bool? recordingStarted = null,
+                                                                      bool? recordingPaused = null, bool? locked = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("meetingId", meetingId);
+
+            var path = getURL($"{meetingsBase}/controls", queryParams);
+
+            var bodyParameters = new Dictionary<string, object>();
+            if (recordingStarted != null) bodyParameters.Add("recordingStarted", recordingStarted);
+            if (recordingPaused != null) bodyParameters.Add("recordingPaused", recordingPaused);
+            if (locked != null) bodyParameters.Add("locked", locked);
+
+            return await UpdateItemAsync<MeetingControls>(path, bodyParameters);
+        }
+
+        /// <summary>
+        /// To start, pause, resume, or stop a meeting recording; To lock or unlock an on-going meeting.
+        /// </summary>
+        /// <param name="meeting">The meeting object to be updated</param>
+        /// <param name="controls">The new meeting control settings</param>
+        /// <returns>The updated meeting state object</returns>
+        public async Task<MeetingControls> UpdateMeetingControlsAsync(Meeting meeting, MeetingControls controls)
+        {
+            return await UpdateMeetingControlsAsync(meeting.Id, controls.RecordingStarted, controls.RecordingPaused, controls.Locked);
+        }
+
 
     }
 

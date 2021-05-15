@@ -126,6 +126,53 @@ namespace SparkDotNet
             return await DeleteMessageAsync(message.id);
         }
 
+        /// <summary>
+        /// Update a message you have posted not more than 10 times.
+        /// Specify the messageId of the message you want to edit.
+        /// Please note edits of messages containing files or attachments are not currently supported.
+        /// If a user attempts to edit a message containing files or attachments a 400 Bad Request will
+        /// be returned by the API with a message stating that the feature is currently unsupported.
+        /// There is also a maximum number of times a user can edit a message.
+        /// The maximum currently supported is 10 edits per message.If a user attempts to edit a message
+        /// greater that the maximum times allowed the API will return 400 Bad Request with a message
+        /// stating the edit limit has been reached.
+        /// While only the roomId and text or markdown attributes are required in the request body,
+        /// a common pattern for editing message is to first call GET /messages/{ id} for the message
+        /// you wish to edit and to then update the text or markdown attribute accordingly,
+        /// passing the updated message object in the request body of the PUT /messages/{id} request.
+        /// When this pattern is used on a message that included markdown, the html attribute must be
+        /// deleted prior to making the PUT request.
+        /// </summary>
+        /// <param name="messageId">The unique identifier for the message.</param>
+        /// <param name="roomId">The room ID of the message.</param>
+        /// <param name="text">The message, in plain text. If markdown is specified this parameter may be optionally used to provide alternate text for UI clients that do not support rich text. The maximum message length is 7439 bytes.</param>
+        /// <param name="markdown">The message, in Markdown format. If this attribute is set ensure that the request does NOT contain an html attribute.</param>
+        /// <returns>The updated message object</returns>
+        public async Task<Message> UpdateMessageAsync(string messageId, string roomId = null, string text = null, string markdown = null)
+        {
+            var queryParams = new Dictionary<string, string>();
+            queryParams.Add("messageId", messageId);
+
+            var postBody = new Dictionary<string, object>();
+            if (roomId != null) postBody.Add("roomId", roomId);
+            if (text != null) postBody.Add("text", text);
+            if (markdown != null) postBody.Add("markdown", markdown);
+
+            var path = getURL($"{messagesBase}/{messageId}", queryParams);
+
+            return await UpdateItemAsync<Message>(path, postBody);
+        }
+
+        /// <summary>
+        /// Updates a message
+        /// </summary>
+        /// <param name="message">The message to be updated</param>
+        /// <returns>The updated message object</returns>
+        public async Task<Message> UpdateMessageAsync(Message message)
+        {
+            return await UpdateMessageAsync(message.id, message.roomId, message.text, message.markdown);
+        }
+
     }
 
 }
