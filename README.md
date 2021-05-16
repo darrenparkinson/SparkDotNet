@@ -148,7 +148,7 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 31 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
+There are 32 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
 
 * [Admin Audit Events](https://developer.webex.com/docs/api/v1/admin-audit-events)
 * [Attachment Actions](https://developer.webex.com/docs/api/v1/attachment-actions)
