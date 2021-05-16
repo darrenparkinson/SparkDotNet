@@ -25,7 +25,6 @@ namespace SparkDotNet
         public Spark(string accessToken)
         {
             this.accessToken = accessToken;
-            client.BaseAddress = new System.Uri(baseURL);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", this.accessToken);
@@ -36,14 +35,7 @@ namespace SparkDotNet
         private async Task<bool> DeleteItemAsync(string path)
         {
             HttpResponseMessage response = await client.DeleteAsync(path);
-            if (response.StatusCode == HttpStatusCode.NoContent)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
         private async Task<T> PostItemAsync<T>(string path, Dictionary<string, object> bodyParams)
@@ -98,7 +90,12 @@ namespace SparkDotNet
 
         private string getURL(string path, Dictionary<string, string> dict)
         {
-            UriBuilder uriBuilder = new UriBuilder(baseURL);
+            return getURL(path, dict, baseURL);
+        }
+
+        private string getURL(string path, Dictionary<string, string> dict, string basePath)
+        {
+            UriBuilder uriBuilder = new UriBuilder(basePath);
             uriBuilder.Path = path;
             string queryString = "";
             if (dict.Count > 0)
@@ -112,7 +109,7 @@ namespace SparkDotNet
                 }
             }
             uriBuilder.Query = queryString;
-            return uriBuilder.Uri.PathAndQuery;
+            return uriBuilder.Uri.ToString();
         }
 
         private async Task<T> UpdateItemAsync<T>(string path, Dictionary<string, object> bodyParams)

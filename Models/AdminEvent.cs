@@ -1,4 +1,4 @@
-using System;
+using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -13,26 +13,31 @@ namespace SparkDotNet
         /// <summary>
         /// Event Data details
         /// </summary>
+        [JsonProperty("data")]
         public AdminEventData Data { get; set; }
 
         /// <summary>
         /// The date and time the event took place.
         /// </summary>
-        public DateTime Created { get; set; }
+        [JsonProperty("created")]
+        public System.DateTime Created { get; set; }
 
         /// <summary>
         /// The orgId of the person who made the change.
         /// </summary>
+        [JsonProperty("actorOrgId")]
         public string ActorOrgId { get; set; }
 
         /// <summary>
         /// A unique identifier for the event.
         /// </summary>
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// The personId of the person who made the change.
         /// </summary>
+        [JsonProperty("actorId")]
         public string ActorId { get; set; }
     }
 }

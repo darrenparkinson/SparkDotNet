@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 
 namespace SparkDotNet
 {
@@ -104,10 +105,12 @@ namespace SparkDotNet
         [JsonProperty("isModified")]
         public bool IsModified { get; set; }
 
+
         /// <summary>
         /// Time zone of start and end, conforming with the IANA time zone database.
         /// </summary>
         [JsonProperty("timezone")]
+        [JsonConverter(typeof(TimeZoneInfoConverter))]
         public System.TimeZoneInfo Timezone { get; set; }
 
         /// <summary>
