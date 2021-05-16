@@ -24,8 +24,10 @@ namespace SparkDotNet
         /// <param name="orgId">List workspaces in this organization. Only admin users of another organization (such as partners) may use this parameter.</param>
         /// <param name="start">Offset. Default is 0.</param>
         /// <param name="max">Limit the maximum number of workspaces in the response.</param>
+        /// <param name="calling">List workspaces by calling type. Possible values: freeCalling, hybridCalling, webexCalling, webexEdgeForDevices</param>
+        /// <param name="calendar">List workspaces by calendar type. Possible values: none, google, microsoft</param>
         /// <returns>List of Workspace objects.</returns>
-        public async Task<List<Workspace>> GetWorkspacesAsync(string displayName = null, int? capacity = null, string type = null, string orgId = null, int start = 0, int max = 0)
+        public async Task<List<Workspace>> GetWorkspacesAsync(string displayName = null, int? capacity = null, string type = null, string orgId = null, int start = 0, int max = 0, string calling = null, string calendar = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (displayName != null) queryParams.Add("displayName", displayName);
@@ -34,6 +36,8 @@ namespace SparkDotNet
             if (orgId != null) queryParams.Add("orgId", orgId);
             if (start > 0) queryParams.Add("start", start.ToString());
             if (max > 0) queryParams.Add("max", max.ToString());
+            if (calling != null) queryParams.Add("calling", calling);
+            if (calendar != null) queryParams.Add("calendar", calendar);
 
             var path = getURL(workspacesBase, queryParams);
             return await GetItemsAsync<Workspace>(path);
@@ -60,15 +64,22 @@ namespace SparkDotNet
         /// <param name="orgId">OrgId associated with the workspace. Only admin users of another organization (such as partners) may use this parameter.</param>
         /// <param name="capacity">How many people the workspace is suitable for. If set, must be 0 or higher.</param>
         /// <param name="type">The type that best describes the workspace.</param>
+        /// <param name="calling">Calling types supported on create are freeCalling and webexEdgeForDevices. Default is freeCalling.</param>
+        /// <param name="calendar">Workspace calendar configuration. Provide a type (microsoft, google or none) and an emailAddress. Default is none.</param>
+        /// <param name="notes">Notes associated to the workspace.</param>
         /// <returns>The newly created Workspace object.</returns>
-        public async Task<Workspace> CreateWorkspaceAsync(string displayName, string orgId = null, int? capacity = null, string type = null)
+        public async Task<Workspace> CreateWorkspaceAsync(string displayName, string orgId = null, int? capacity = null, string type = null,
+                                                          WorkspaceCallingType calling = null, WorkspaceCalendar calendar = null, string notes = null)
         {
             var postBody = new Dictionary<string, object>();
             postBody.Add("displayName", displayName);
             if (orgId != null) postBody.Add("orgId", orgId);
             if (capacity != null) postBody.Add("capacity", System.Math.Max((int)capacity, 0));
             if (type != null) postBody.Add("type", type);
-            
+            if (calling != null) postBody.Add("calling", calling);
+            if (calendar != null) postBody.Add("calendar", calendar);
+            if (notes != null) postBody.Add("notes", notes);
+
             return await PostItemAsync<Workspace>(workspacesBase, postBody);
         }
 
@@ -102,13 +113,17 @@ namespace SparkDotNet
         /// <param name="displayName">A friendly name for the workspace.</param>
         /// <param name="capacity">How many people the workspace is suitable for. If set, must be 0 or higher.</param>
         /// <param name="type">The type that best describes the workspace.</param>
+        /// <param name="calendar">An empty/null calendar field will not cause any changes. Provide a type (microsoft, google or none) and an emailAddress. Removing calendar is done by setting the none type, and setting none type does not require an emailAddress.</param>
+        /// <param name="notes">Notes associated to the workspace.</param>
         /// <returns>The updated workspace object</returns>
-        public async Task<Workspace> UpdateWorkspaceAsync(string workspaceId, string displayName, int? capacity = null, string type = null)
+        public async Task<Workspace> UpdateWorkspaceAsync(string workspaceId, string displayName, int? capacity = null, string type = null, WorkspaceCalendar calendar = null, string notes = null)
         {
             var putBody = new Dictionary<string, object>();
             putBody.Add("displayName", displayName);
             if (capacity != null) putBody.Add("capacity", System.Math.Max((int)capacity, 0));
             if (type != null) putBody.Add("type", type);
+            if (calendar != null) putBody.Add("calendar", calendar);
+            if (notes != null) putBody.Add("notes", notes);
             var path = $"{workspacesBase}/{workspaceId}";
             return await UpdateItemAsync<Workspace>(path, putBody);
         }
@@ -120,7 +135,7 @@ namespace SparkDotNet
         /// <returns>The udated workspace object</returns>
         public async Task<Workspace> UpdateWorkspacesync(Workspace workspace)
         {
-            return await UpdateWorkspaceAsync(workspace.Id, workspace.DisplayName, workspace.Capacity, workspace.Type);
+            return await UpdateWorkspaceAsync(workspace.Id, workspace.DisplayName, workspace.Capacity, workspace.Type, workspace.Calendar, workspace.Notes);
         }
     }
 

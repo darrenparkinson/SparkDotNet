@@ -1,4 +1,4 @@
-using System;
+using Newtonsoft.Json;
 
 namespace SparkDotNet
 {
@@ -18,16 +18,19 @@ namespace SparkDotNet
         /// <summary>
         /// Unique identifier for the Workspace.
         /// </summary>
+        [JsonProperty("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// A friendly name for the workspace.
         /// </summary>
+        [JsonProperty("displayName")]
         public string DisplayName { get; set; }
 
         /// <summary>
         /// How many people the workspace is suitable for.
         /// </summary>
+        [JsonProperty("capacity")]
         public int Capacity { get; set; }
 
         /// <summary>
@@ -40,21 +43,43 @@ namespace SparkDotNet
         /// desk: Individual.
         /// other: Unspecified.
         /// </summary>
+        [JsonProperty("type")]
         public string Type { get; set; }
 
         /// <summary>
         /// OrgId associate with the workspace
         /// </summary>
+        [JsonProperty("orgId")]
         public string OrgId { get; set; }
 
         /// <summary>
         /// SipUrl to call all the devices associated with the workspace.
         /// </summary>
+        [JsonProperty("sipAddress")]
         public string SipAddress { get; set; }
 
         /// <summary>
         /// The date and time that the workspace was registered, in ISO8601 format.
         /// </summary>
-        public DateTime Created { get; set; }
+        [JsonProperty("created")]
+        public System.DateTime Created { get; set; }
+
+        /// <summary>
+        /// Calling type. Possible values: freeCalling, hybridCalling, webexCalling, webexEdgeForDevices
+        /// </summary>
+        [JsonProperty("calling")]
+        public WorkspaceCallingType Calling { get; set; }
+
+        /// <summary>
+        /// Calendar type. Possible values: none, google, microsoft.
+        /// </summary>
+        [JsonProperty("calendar")]
+        public WorkspaceCalendar Calendar { get; set; }
+
+        /// <summary>
+        /// Notes associated to the workspace.
+        /// </summary>
+        [JsonProperty("notes")]
+        public string Notes { get; set; }
     }
 }
