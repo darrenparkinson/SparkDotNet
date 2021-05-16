@@ -148,7 +148,7 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 32 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
+There are 33 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
 
 * [Admin Audit Events](https://developer.webex.com/docs/api/v1/admin-audit-events)
 * [Attachment Actions](https://developer.webex.com/docs/api/v1/attachment-actions)
@@ -161,7 +161,8 @@ There are 32 endpoints covered by this library. Please refer to the Cisco docume
 * [Locations](https://developer.webex.com/docs/api/v1/locations)
 * [Meeting Invitees](https://developer.webex.com/docs/api/v1/meeting-invitees)
 * [Meeting Participants](https://developer.webex.com/docs/api/v1/meeting-participants)
-* [Meeting Preferences (partially)](https://developer.webex.com/docs/api/v1/meeting-preferences)
+* [Meeting Preferences](https://developer.webex.com/docs/api/v1/meeting-preferences)
+* [Meeting Qualities](https://developer.webex.com/docs/api/v1/meeting-qualities)
 * [Meetings](https://developer.webex.com/docs/api/v1/meetings)
 * [Memberships](https://developer.webex.com/docs/api/v1/memberships)
 * [Messages](https://developer.webex.com/docs/api/v1/messages)

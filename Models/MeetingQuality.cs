@@ -19,32 +19,38 @@ namespace SparkDotNet {
         /// <summary>
         /// The meeting identifier for the specific meeting instance.
         /// </summary>
-        [JsonProperty("meetingId")]
-        public string MeetingId { get; set; }
+        [JsonProperty("meetingInstanceId")]
+        public string MeetingInstanceId { get; set; }
 
         /// <summary>
         /// The display name of the participant of this media session.
         /// </summary>
-        [JsonProperty("displayName")]
-        public string DisplayName { get; set; }
+        [JsonProperty("webexUserName")]
+        public string WebexUserName { get; set; }
 
         /// <summary>
         /// The email address of the participant of this media session.
         /// </summary>
-        [JsonProperty("email")]
-        public string Email { get; set; }
+        [JsonProperty("webexUserEmail")]
+        public string WebexUserEmail { get; set; }
 
         /// <summary>
         /// The date and time when this participant joined the meeting.
         /// </summary>
-        [JsonProperty("joined")]
-        public System.DateTime Joined { get; set; }
+        [JsonProperty("joinTime")]
+        public System.DateTime JoinTime { get; set; }
+
+        /// <summary>
+        /// The date and time when this participant leaved the meeting.
+        /// </summary>
+        [JsonProperty("leaveTime")]
+        public System.DateTime LeaveTime { get; set; }
 
         /// <summary>
         /// The type of the client (and OS) used by this media session.
         /// </summary>
-        [JsonProperty("client")]
-        public string Client { get; set; }
+        [JsonProperty("clientType")]
+        public string ClientType { get; set; }
 
         /// <summary>
         /// The version of the client used by this media session.
@@ -98,14 +104,14 @@ namespace SparkDotNet {
         /// <summary>
         /// A description of the camera used in the meeting.
         /// </summary>
-        [JsonProperty("camera")]
-        public string Camera { get; set; }
+        [JsonProperty("cameraName")]
+        public string CameraName { get; set; }
 
         /// <summary>
         /// A description of the microphone used in the meeting.
         /// </summary>
-        [JsonProperty("microphone")]
-        public string Microphone { get; set; }
+        [JsonProperty("microphoneName")]
+        public string MicrophoneName { get; set; }
 
         /// <summary>
         /// The server region.
