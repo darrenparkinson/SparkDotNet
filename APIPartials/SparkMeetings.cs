@@ -23,7 +23,7 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="meetingNumber">Meeting number for the meeting objects being requested. meetingNumber and webLink are mutually exclusive.</param>
         /// <param name="webLink">URL encoded link to information page for the meeting objects being requested. meetingNumber and webLink are mutually exclusive.</param>
-        /// <param name="meethingType">Meeting type for the meeting objects being requested. The default value is meetingSeries. Possible values: meetingSeries, scheduledMeeting, meeting</param>
+        /// <param name="meetingType">Meeting type for the meeting objects being requested. The default value is meetingSeries. Possible values: meetingSeries, scheduledMeeting, meeting</param>
         /// <param name="state">Meeting state for the meeting objects being requested. If not specified, return meetings of all states. Possible values: active, scheduled, ready, lobby, inProgress, ended, missed, expired</param>
         /// <param name="participantEmail">Meeting participant email address for the meeting objects being requested.</param>
         /// <param name="current">Whether or not to only retrieve the current scheduled meeting of the meeting series, i.e. the meeting ready to join or start or the upcoming meeting of the meeting series. Default: true</param>
@@ -32,16 +32,18 @@ namespace SparkDotNet
         /// <param name="max">Limit the maximum number of meetings in the response, up to 100. Default: 10</param>
         /// <param name="hostEmail">Email address for the meeting host. This parameter is only used if the user or application calling the API has the admin-level scopes. If set, the admin may specify the email of a user in a site they manage and the API will return details for meetings that are hosted by that user.</param>
         /// <param name="siteUrl">URL of the Webex site which the API lists meetings from. If not specified, the API lists meetings from user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
+        /// <param name="integrationTag">External key created by an integration application. This parameter is used by the integration application to query meetings by a key in its own domain such as a Zendesk ticket ID, a Jira ID, a Salesforce Opportunity ID, etc.</param>
         /// <returns>A list of Meeting objects</returns>
-        public async Task<List<Meeting>> GetMeetingsAsync(string meetingNumber = null, string webLink = null, string meethingType = null,
+        public async Task<List<Meeting>> GetMeetingsAsync(string meetingNumber = null, string webLink = null, string meetingType = null,
                                                           string state = null, string participantEmail = null, bool? current = null,
                                                           string from = null, string to = null,
-                                                          int max = 0, string hostEmail = null, string siteUrl = null)
+                                                          int max = 0, string hostEmail = null, string siteUrl = null,
+                                                          string integrationTag = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (meetingNumber != null) queryParams.Add("meetingNumber", meetingNumber);
             if (webLink != null) queryParams.Add("webLink", webLink);
-            if (meethingType != null) queryParams.Add("meethingType", meethingType);
+            if (meetingType != null) queryParams.Add("meetingType", meetingType);
             if (state != null) queryParams.Add("state", state);
             if (participantEmail != null) queryParams.Add("participantEmail", participantEmail);
             if (current != null) queryParams.Add("current", current.ToString());
@@ -50,6 +52,7 @@ namespace SparkDotNet
             if (max > 0) queryParams.Add("max", max.ToString());
             if (hostEmail != null) queryParams.Add("hostEmail", hostEmail);
             if (siteUrl != null) queryParams.Add("siteUrl", siteUrl);
+            if (integrationTag != null) queryParams.Add("integrationTag", integrationTag);
 
             var path = getURL(meetingsBase, queryParams);
             return await GetItemsAsync<Meeting>(path);
@@ -94,6 +97,7 @@ namespace SparkDotNet
         /// <param name="recurrence">Meeting series recurrence rule (conforming with RFC 2445), applying only to meeting series. This attribute is not allowed for a scheduled meeting or a meeting instance that is happening or has happended.</param>
         /// <param name="invitees">Invitees for meeting.</param>
         /// <returns>The new created Meeting object.</returns>
+        /// <remarks>This method is kept due to compatibility</remarks>
         public async Task<Meeting> CreateMeetingAsync(string title, string password, DateTime start, DateTime end,
                                                     bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
                                                     string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
@@ -121,12 +125,24 @@ namespace SparkDotNet
         /// <param name="invitees">Invitees for meeting.</param>
         /// <param name="hostEmail">Email address for the meeting host. This attribute should only be set if the user or application calling the API has the admin-level scopes. When used, the admin may specify the email of a user in a site they manage to be the meeting host.</param>
         /// <param name="siteUrl">URL of the Webex site which the meeting is created on. If not specified, the meeting is created on user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
+        /// <param name="enabledJoinBeforeHost">Whether or not to allow any attendee to join the meeting before the host joins the meeting. The enabledJoinBeforeHost attribute can be modified for meeting series or scheduled meeting by Update a Meeting API.</param>
+        /// <param name="enableConnectAudioBeforeHost">Whether or not to allow any attendee to connect audio in the meeting before host joins the meeting. This attribute is only applicable if the enabledJoinBeforeHost attribute is set to true. The enableConnectAudioBeforeHost attribute can be modified for meeting series or scheduled meeting by Update a Meeting API.</param>
+        /// <param name="joinBeforeHostMinutes">the number of minutes an attendee can join the meeting before the meeting start time and the host joins. This attribute is only applicable if the enabledJoinBeforeHost attribute is set to true. The joinBeforeHostMinutes attribute can be modified for meeting series or scheduled meeting by Update a Meeting API. Valid options are 0, 5, 10 and 15. Default is 0 if not specified.</param>
+        /// <param name="allowFirstUserToBeCoHost">Whether or not to allow the first attendee of the meeting with a host account on the target site to become a cohost. The target site is specified by siteUrl parameter when creating the meeting; if not specified, it's user's preferred site. The allowFirstUserToBeCoHost attribute can be modified for meeting series or scheduled meeting by Update a Meeting API.</param>
+        /// <param name="allowAuthenticatedDevices">Whether or not to allow authenticated video devices in the meeting's organization to start or join the meeting without a prompt. This attribute can be modified for meeting series or scheduled meeting by Update a Meeting API.</param>
+        /// <param name="sendEmail">Whether or not to send emails to host and invitees. It is an optional field and default value is true.</param>
+        /// <param name="registration">Meeting registration. When this option is enabled, meeting invitee must register personal information in order to join the meeting. Meeting invitee will receive an email with a registration link for the registration. When the registration form has been submitted and approved, an email with a real meeting link will be received. By clicking that link the meeting invitee can join the meeting. Please note that meeting registration does not apply to a meeting when it's a recurring meeting with recurrence field or it has no password, or the Join Before Host option is enabled for the meeting. Read Register for a Meeting in Cisco Webex Meetings for details.</param>
+        /// <param name="integrationTags">External keys created by an integration application in its own domain. They could be Zendesk ticket IDs, Jira IDs, Salesforce Opportunity IDs, etc. The integration application queries meetings by a key in its own domain. The maximum size of integrationTags is 3 and each item of integrationTags can be a maximum of 64 characters long.</param>
         /// <returns>The new created Meeting object.</returns>
         public async Task<Meeting> CreateMeetingAsync(string title, DateTime start, DateTime end,
                                                     bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
                                                     string password = null, string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
                                                     MeetingInvitee[] invitees = null, string hostEmail = null,
-                                                    string siteUrl = null)
+                                                    string siteUrl = null, bool? enabledJoinBeforeHost = null,
+                                                    bool? enableConnectAudioBeforeHost = null, int? joinBeforeHostMinutes = null,
+                                                    bool? allowFirstUserToBeCoHost = null, bool? allowAuthenticatedDevices = null,
+                                                    bool? sendEmail = null, MeetingRegistration registration = null,
+                                                    string[] integrationTags = null)
         {
             var bodyParameters = new Dictionary<string, object>();
             bodyParameters.Add("title", title);
@@ -142,6 +158,14 @@ namespace SparkDotNet
             if (invitees != null) bodyParameters.Add("invitees", invitees);
             if (hostEmail != null) bodyParameters.Add("hostEmail", hostEmail);
             if (siteUrl != null) bodyParameters.Add("siteUrl", siteUrl);
+            if (enabledJoinBeforeHost != null) bodyParameters.Add("enabledJoinBeforeHost", enabledJoinBeforeHost);
+            if (enableConnectAudioBeforeHost != null) bodyParameters.Add("enableConnectAudioBeforeHost", enableConnectAudioBeforeHost);
+            if (joinBeforeHostMinutes != null) bodyParameters.Add("joinBeforeHostMinutes", joinBeforeHostMinutes);
+            if (allowFirstUserToBeCoHost != null) bodyParameters.Add("allowFirstUserToBeCoHost", allowFirstUserToBeCoHost);
+            if (allowAuthenticatedDevices != null) bodyParameters.Add("allowAuthenticatedDevices", allowAuthenticatedDevices);
+            if (sendEmail != null) bodyParameters.Add("sendEmail", sendEmail);
+            if (registration != null) bodyParameters.Add("registration", registration);
+            if (integrationTags != null) bodyParameters.Add("integrationTags", integrationTags);
 
             return await PostItemAsync<Meeting>(meetingsBase, bodyParameters);
         }
@@ -153,12 +177,16 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="meeting">Meeting object with details for the meeting to be created.</param>
         /// <param name="invitees">Invitees for meeting.</param>
+        /// <param name="integrationTags">External keys created by an integration application in its own domain. They could be Zendesk ticket IDs, Jira IDs, Salesforce Opportunity IDs, etc. The integration application queries meetings by a key in its own domain. The maximum size of integrationTags is 3 and each item of integrationTags can be a maximum of 64 characters long.</param>
+        /// <param name="sendEmail">Whether or not to send emails to host and invitees. It is an optional field and default value is true.</param>
         /// <returns>The new created Meeting object.</returns>
-        public async Task<Meeting> CreateMeetingAsync(Meeting meeting, MeetingInvitee[] invitees = null)
+        public async Task<Meeting> CreateMeetingAsync(Meeting meeting, MeetingInvitee[] invitees = null, string[] integrationTags = null, bool? sendEmail = null )
         {
             return await CreateMeetingAsync(meeting.Title, meeting.Start, meeting.End, meeting.EnabledAutoRecordMeeting,
                                             meeting.AllowAnyUserToBeCoHost, meeting.Password, meeting.Agenda, meeting.Timezone, meeting.Recurrence,
-                                            invitees, meeting.HostEmail, meeting.SiteUrl);
+                                            invitees, meeting.HostEmail, meeting.SiteUrl, meeting.EnabledJoinBeforeHost, meeting.EnableConnectAudioBeforeHost,
+                                            meeting.JoinBeforeHostMinutes, meeting.AllowFirstUserToBeCoHost, meeting.AllowAuthenticatedDevices, sendEmail,
+                                            meeting.Registration, integrationTags);
         }
 
         /// <summary>
@@ -242,11 +270,21 @@ namespace SparkDotNet
         /// <param name="recurrence">Meeting series recurrence rule (conforming with RFC 2445), applying only to meeting series. This attribute is not allowed for a scheduled meeting or a meeting instance that is happening or has happended.</param>
         /// <param name="hostEmail">Email address for the meeting host. This attribute should only be set if the user or application calling the API has the admin-level scopes. When used, the admin may specify the email of a user in a site they manage to be the meeting host.</param>
         /// <param name="siteUrl">URL of the Webex site which the meeting is updated on. If not specified, the meeting is created on user's preferred site. All available Webex sites and preferred site of the user can be retrieved by Get Site List API.</param>
+        /// <param name="enabledJoinBeforeHost">Whether or not to allow any attendee to join the meeting before the host joins the meeting.</param>
+        /// <param name="enableConnectAudioBeforeHost">Whether or not to allow any attendee to connect audio in the meeting before the host joins the meeting. This attribute is only applicable if the enabledJoinBeforeHost attribute is set to true.</param>
+        /// <param name="joinBeforeHostMinutes">the number of minutes an attendee can join the meeting before the meeting start time and the host joins. This attribute is only applicable if the enabledJoinBeforeHost attribute is set to true. Valid options are 0, 5, 10 and 15. Default is 0 if not specified.</param>
+        /// <param name="allowFirstUserToBeCoHost">Whether or not to allow the first attendee of the meeting with a host account on the target site to become a cohost. The target site is specified by siteUrl parameter when creating the meeting; if not specified, it's user's preferred site.</param>
+        /// <param name="allowAuthenticatedDevices">Whether or not to allow authenticated video devices in the meeting's organization to start or join the meeting without a prompt.</param>
+        /// <param name="sendEmail">Whether or not to send emails to host and invitees. It is an optional field and default value is true.</param>
+        /// <param name="registration">Meeting registration. When this option is enabled, meeting invitee must register personal information in order to join the meeting. Meeting invitee will receive an email with a registration link for the registration. When the registration form has been submitted and approved, an email with a real meeting link will be received. By clicking that link the meeting invitee can join the meeting. Please note that meeting registration does not apply to a meeting when it's a recurring meeting with recurrence field or it has no password, or the Join Before Host option is enabled for the meeting. Read Register for a Meeting in Cisco Webex Meetings for details.</param>
         /// <returns>The updated Meeting object.</returns>
         public async Task<Meeting> UpdateMeetingAsync(string meetingId, string title, string password, DateTime start, DateTime end,
-                                            bool enabledAutoRecordMeeting, bool allowAnyUserToBeCoHost,
+                                            bool enabledAutoRecordMeeting, bool? allowAnyUserToBeCoHost = null,
                                             string agenda = null, TimeZoneInfo timezone = null, string recurrence = null,
-                                            string hostEmail = null, string siteUrl = null)
+                                            string hostEmail = null, string siteUrl = null, bool? enabledJoinBeforeHost = null,
+                                            bool? enableConnectAudioBeforeHost = null, int? joinBeforeHostMinutes = null,
+                                            bool? allowFirstUserToBeCoHost = null, bool? allowAuthenticatedDevices = null,
+                                            bool? sendEmail = null, MeetingRegistration registration = null)
         {
             var bodyParameters = new Dictionary<string, object>();
             bodyParameters.Add("title", title);
@@ -254,13 +292,20 @@ namespace SparkDotNet
             bodyParameters.Add("start", start);
             bodyParameters.Add("end", end);
             bodyParameters.Add("enabledAutoRecordMeeting", enabledAutoRecordMeeting);
-            bodyParameters.Add("allowAnyUserToBeCoHost", allowAnyUserToBeCoHost);
 
+            if (allowAnyUserToBeCoHost != null) bodyParameters.Add("allowAnyUserToBeCoHost", allowAnyUserToBeCoHost);
             if (agenda != null) bodyParameters.Add("agenda", agenda);
             if (timezone != null) bodyParameters.Add("timezone", timezone);
             if (recurrence != null) bodyParameters.Add("recurrence", recurrence);
             if (hostEmail != null) bodyParameters.Add("hostEmail", hostEmail);
             if (siteUrl != null) bodyParameters.Add("siteUrl", siteUrl);
+            if (enabledJoinBeforeHost != null) bodyParameters.Add("enabledJoinBeforeHost", enabledJoinBeforeHost);
+            if (enableConnectAudioBeforeHost != null) bodyParameters.Add("enableConnectAudioBeforeHost", enableConnectAudioBeforeHost);
+            if (joinBeforeHostMinutes != null) bodyParameters.Add("joinBeforeHostMinutes", joinBeforeHostMinutes);
+            if (allowFirstUserToBeCoHost != null) bodyParameters.Add("allowFirstUserToBeCoHost", allowFirstUserToBeCoHost);
+            if (allowAuthenticatedDevices != null) bodyParameters.Add("allowAuthenticatedDevices", allowAuthenticatedDevices);
+            if (sendEmail != null) bodyParameters.Add("sendEmail", sendEmail);
+            if (registration != null) bodyParameters.Add("registration", registration);
 
             return await PostItemAsync<Meeting>($"{meetingsBase}/{meetingId}", bodyParameters);
         }
@@ -269,12 +314,16 @@ namespace SparkDotNet
         /// Update a recurring meeting series
         /// </summary>
         /// <param name="meeting">The Meeting object to be updated</param>
+        /// <param name="sendEmail">Whether or not to send emails to host and invitees. It is an optional field and default value is true.</param>
         /// <returns>The updated Meeting object.</returns>
-        public async Task<Meeting> UpdateMeetingAsync(Meeting meeting)
+        public async Task<Meeting> UpdateMeetingAsync(Meeting meeting, bool? sendEmail = null)
         {
             return await UpdateMeetingAsync(meeting.Id, meeting.Title, meeting.Password, meeting.Start, meeting.End,
                                             meeting.EnabledAutoRecordMeeting, meeting.AllowAnyUserToBeCoHost, meeting.Agenda,
-                                            meeting.Timezone, meeting.Recurrence, meeting.HostEmail, meeting.SiteUrl);
+                                            meeting.Timezone, meeting.Recurrence, meeting.HostEmail, meeting.SiteUrl,
+                                            meeting.EnabledJoinBeforeHost, meeting.EnableConnectAudioBeforeHost,
+                                            meeting.JoinBeforeHostMinutes, meeting.AllowFirstUserToBeCoHost,
+                                            meeting.AllowAuthenticatedDevices, sendEmail, meeting.Registration);
         }
 
         /// <summary>
