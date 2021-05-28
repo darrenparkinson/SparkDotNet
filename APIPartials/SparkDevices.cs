@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string devicesBase = "/v1/devices";
+        private readonly string devicesBase = "/v1/devices";
 
         /// <summary>
         /// Lists all active Webex devices associated with the authenticated user, such as devices activated in personal mode.

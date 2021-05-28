@@ -6,7 +6,7 @@ namespace SparkDotNet
 
     public partial class Spark
     {
-        private string peopleBase = "/v1/people";
+        private readonly string peopleBase = "/v1/people";
 
         /// <summary>
         /// List people in your organization.
@@ -137,8 +137,6 @@ namespace SparkDotNet
             return await DeletePersonAsync(person.id);
         }
 
-
-
         /// <summary>
         /// Update details for a person, by ID.
         /// Specify the person ID in the personId parameter in the URI. Only an admin can update a person details.
@@ -154,20 +152,24 @@ namespace SparkDotNet
         /// <param name="licenses">An array of license strings allocated to this person.</param>
         /// <param name="callingData">Include BroadCloud user details in the response. Default: false</param>
         /// <param name="extension">The extension of the person retrieved from BroadCloud.</param>
+        /// <param name="loginEnabled">Whether or not the user is allowed to use Webex. This property is only accessible if the authenticated user is an admin user for the person's organization.</param>
+        /// <param name="phoneNumbers">Phone numbers for the person. Can only be set for Webex Calling. Needs a Webex Calling license.</param>
+        /// <param name="showAllTypes">Include additional user data like #attendee role</param>
         /// <returns>Person object.</returns>
-        public async Task<Person> UpdatePersonAsync(string personId, string[] emails = null, string orgId = null, string[] roles = null,
-                                                    string displayName = null, string firstName = null, string lastName = null, string avatar = null,
+        public async Task<Person> UpdatePersonAsync(string personId, string displayName, string[] emails = null, string orgId = null, string[] roles = null,
+                                                    string firstName = null, string lastName = null, string avatar = null,
                                                     string[] licenses = null, bool? callingData = null, PhoneNumber[] phoneNumbers = null,
-                                                    string extension = null)
+                                                    string extension = null, bool? loginEnabled = null, bool? showAllTypes = null)
         {
             var queryParams = new Dictionary<string, string>();
             if (callingData != null) queryParams.Add("callingData", callingData.ToString());
+            if (showAllTypes != null) queryParams.Add("showAllTypes", showAllTypes.ToString());
             var path = getURL($"{peopleBase}/{personId}", queryParams);
 
             var putBody = new Dictionary<string, object>();
             putBody.Add("personId",personId);
             if (emails != null) putBody.Add("emails", emails);
-            if (displayName != null) putBody.Add("displayName", displayName);
+            putBody.Add("displayName", displayName);
             if (firstName != null) putBody.Add("firstName", firstName);
             if (lastName != null) putBody.Add("lastName", lastName);
             if (avatar != null) putBody.Add("avatar", avatar);
@@ -176,7 +178,8 @@ namespace SparkDotNet
             if (licenses != null) putBody.Add("licenses", licenses);
             if (phoneNumbers != null) putBody.Add("phoneNumbers", phoneNumbers);
             if (extension != null) putBody.Add("extension", extension);
-            
+            if (loginEnabled != null) putBody.Add("extension", loginEnabled);
+
             return await UpdateItemAsync<Person>(path, putBody);
         }
 
@@ -186,11 +189,14 @@ namespace SparkDotNet
         /// </summary>
         /// <param name="person">The person object to update</param>
         /// <param name="callingData">Include BroadCloud user details in the response. Default: false</param>
+        /// <param name="showAllTypes">Include additional user data like #attendee role</param>
         /// <returns>Person object.</returns>
-        public async Task<Person> UpdatePersonAsync(Person person, bool? callingData = null)
+        public async Task<Person> UpdatePersonAsync(Person person, bool? callingData = null, bool? showAllTypes = null)
         {
-            return await UpdatePersonAsync(person.id, person.emails, person.orgId, person.roles, person.displayName, person.firstName, person.lastName,
-                                           person.avatar, person.licenses, callingData, person.PhoneNumbers, person.Extension);
+            return await UpdatePersonAsync(person.id, person.displayName, person.emails, person.orgId, person.roles,
+                                           person.firstName, person.lastName, person.avatar, person.licenses,
+                                           callingData, person.PhoneNumbers, person.Extension,  person.LoginEnabled, showAllTypes
+);
         }
 
     }

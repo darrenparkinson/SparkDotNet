@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string adminEventsBase = "/v1/adminAudit";
+        private readonly string adminEventsBase = "/v1/adminAudit";
 
         /// <summary>
         /// List admin audit events in your organization. Several query parameters are available to filter the response.

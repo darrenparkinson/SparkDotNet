@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string licensesBase = "/v1/licenses";
+        private readonly string licensesBase = "/v1/licenses";
 
         /// <summary>
         /// List all licenses for a given organization. If no orgId is specified, the default is the organization of the authenticated user.

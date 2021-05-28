@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string placesBase = "/v1/places";
+        private readonly string placesBase = "/v1/places";
 
         /// <summary>
         /// List places. Use query parameters to filter the response.

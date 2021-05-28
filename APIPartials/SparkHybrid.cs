@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string hybridBase = "/v1/hybrid";
+        private readonly string hybridBase = "/v1/hybrid";
 
         #region HybridConnector
         /// <summary>
@@ -54,7 +54,7 @@ namespace SparkDotNet
 
             if (orgId != null) queryParams.Add("orgId", orgId);
 
-            var path = getURL($"{hybridBase}/clsuters", queryParams);
+            var path = getURL($"{hybridBase}/clusters", queryParams);
             return await GetItemsAsync<HybridCluster>(path);
         }
 
@@ -67,7 +67,7 @@ namespace SparkDotNet
         public async Task<HybridCluster> GetHybridClusterAsync(string hybridClusterId)
         {
             var queryParams = new Dictionary<string, string>();
-            var path = getURL($"{hybridBase}/clsuters/{hybridClusterId}", queryParams);
+            var path = getURL($"{hybridBase}/clusters/{hybridClusterId}", queryParams);
             return await GetItemAsync<HybridCluster>(path);
         }
         #endregion HybridCluster

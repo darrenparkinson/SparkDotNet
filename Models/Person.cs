@@ -27,21 +27,25 @@ namespace SparkDotNet
         /// <summary>
         /// Phone numbers for the person.
         /// </summary>
+        [JsonProperty("phoneNumbers")]
         public PhoneNumber[] PhoneNumbers { get; set; }
 
         /// <summary>
         /// Sip addresses for the person.
         /// </summary>
+        [JsonProperty("sipAddresses")]
         public SipAddress[] SipAddresses { get; set; }
 
         /// <summary>
         /// The extension of the person retrieved from BroadCloud.
         /// </summary>
+        [JsonProperty("extension")]
         public string Extension { get; set; }
 
         /// <summary>
         /// The ID of the location for this person retrieved from BroadCloud.
         /// </summary>
+        [JsonProperty("locationId")]
         public string LocationId { get; set; }
 
         /// <summary>
@@ -92,6 +96,7 @@ namespace SparkDotNet
         /// <summary>
         /// The date and time the person was last changed.
         /// </summary>
+        [JsonProperty("lastModified")]
         public DateTime LastModified { get; set; }
 
         /// <summary>
@@ -124,6 +129,7 @@ namespace SparkDotNet
         /// true: the person has been invited to Webex Teams but has not created an account
         /// false: an invite is not pending for this person
         /// </summary>
+        [JsonProperty("invitePending")]
         public bool InvitePending { get; set; }
 
         /// <summary>
@@ -132,6 +138,7 @@ namespace SparkDotNet
         /// true: the person can log into Webex Teams
         /// false: the person cannot log into Webex Teams
         /// </summary>
+        [JsonProperty("loginEndbaled")]
         public bool LoginEnabled { get; set; }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string recordingsBase = "/v1/recordings";
+        private readonly string recordingsBase = "/v1/recordings";
 
         /// <summary>
         /// Lists recordings. You can specify a date range and the maximum number of recordings to return.

@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string xAPIBase = "/v1/xapi";
+        private readonly string xAPIBase = "/v1/xapi";
 
         /// <summary>
         /// Query the current status of the Webex RoomOS Device.

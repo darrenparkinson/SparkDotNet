@@ -148,7 +148,7 @@ namespace ConsoleApplication
 
 # Reference
 
-There are 25 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
+There are 33 endpoints covered by this library. Please refer to the Cisco documentation for details of their use:
 
 * [Admin Audit Events](https://developer.webex.com/docs/api/v1/admin-audit-events)
 * [Attachment Actions](https://developer.webex.com/docs/api/v1/attachment-actions)
@@ -160,6 +160,9 @@ There are 25 endpoints covered by this library. Please refer to the Cisco docume
 * [Licenses](https://developer.webex.com/docs/api/v1/licenses)
 * [Locations](https://developer.webex.com/docs/api/v1/locations)
 * [Meeting Invitees](https://developer.webex.com/docs/api/v1/meeting-invitees)
+* [Meeting Participants](https://developer.webex.com/docs/api/v1/meeting-participants)
+* [Meeting Preferences](https://developer.webex.com/docs/api/v1/meeting-preferences)
+* [Meeting Qualities](https://developer.webex.com/docs/api/v1/meeting-qualities)
 * [Meetings](https://developer.webex.com/docs/api/v1/meetings)
 * [Memberships](https://developer.webex.com/docs/api/v1/memberships)
 * [Messages](https://developer.webex.com/docs/api/v1/messages)
@@ -167,16 +170,21 @@ There are 25 endpoints covered by this library. Please refer to the Cisco docume
 * [People](https://developer.webex.com/docs/api/v1/people)
 * [Places](https://developer.webex.com/docs/api/v1/places)
 * [Recordings](https://developer.webex.com/docs/api/v1/recordings)
+* [Report Templates](https://developer.webex.com/docs/api/v1/report-templates)
+* [Reports](https://developer.webex.com/docs/api/v1/reports)
 * [Resource Group Membership](https://developer.webex.com/docs/api/v1/resource-group-memberships)
 * [Resource Groups](https://developer.webex.com/docs/api/v1/resource-groups)
 * [Roles](https://developer.webex.com/docs/api/v1/roles)
+* [Rooms Tabs](https://developer.webex.com/docs/api/v1/room-tabs)
 * [Rooms](https://developer.webex.com/docs/api/v1/rooms)
-* [Team Membership](https://developer.webex.com/docs/api/v1/team-memberships)
+* [Space Classifications](https://developer.webex.com/docs/api/v1/space-classifications)
+* [Team Mebership](https://developer.webex.com/docs/api/v1/team-memberships)
 * [Teams](https://developer.webex.com/docs/api/v1/teams)
 * [Webhooks](https://developer.webex.com/docs/api/v1/webhooks)
+* [Workspaces](https://developer.webex.com/docs/api/v1/workspaces)
 * [xAPI](https://developer.webex.com/docs/api/v1/xapi)
 
-Each endpoint has a corresponding method in the Spark class mapping to `Get`, `Create`, `Update` and `Delete` based on the HTTP method used, `GET`, `POST`, `PUT` and `DELETE` respectively.  As an example, using the People endpoint, these map as follows:
+Most endpoints have a corresponding method in the Spark class mapping to `Get`, `Create`, `Update` and `Delete` based on the HTTP method used, `GET`, `POST`, `PUT` and `DELETE` respectively.  As an example, using the People endpoint, these map as follows:
 
 | Cisco Endpoint | HTTP Method | Spark Class Method |
 | -------------- |:-----------:|:-------------------|

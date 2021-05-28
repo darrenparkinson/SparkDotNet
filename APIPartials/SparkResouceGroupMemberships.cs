@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string resourceGroupMembershipsBase = "/v1/resourceGroups/memberships";
+        private readonly string resourceGroupMembershipsBase = "/v1/resourceGroups/memberships";
 
         /// <summary>
         /// Lists all resource group memberships for an organization.

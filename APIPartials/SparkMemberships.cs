@@ -7,7 +7,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string membershipsBase = "/v1/memberships";
+        private readonly string membershipsBase = "/v1/memberships";
 
         /// <summary>
         /// Lists all room memberships. By default, lists memberships for rooms to which the authenticated user belongs.

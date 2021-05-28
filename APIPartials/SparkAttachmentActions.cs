@@ -5,7 +5,7 @@ namespace SparkDotNet
 {
     public partial class Spark
     {
-        private string attachmentActionBase = "/v1/attachment/actions";
+        private readonly string attachmentActionBase = "/v1/attachment/actions";
 
         /// <summary>
         /// Shows details for an attachment action, by attachment action ID.

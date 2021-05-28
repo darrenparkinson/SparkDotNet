@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string rolesBase = "/v1/roles";
+        private readonly string rolesBase = "/v1/roles";
 
         /// <summary>
         /// List all roles.

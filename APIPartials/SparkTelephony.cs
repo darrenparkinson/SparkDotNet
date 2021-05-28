@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string telephonyBase = "/v1/telephony";
+        private readonly string telephonyBase = "/v1/telephony";
 
         #region Calls GET commands
         /// <summary>

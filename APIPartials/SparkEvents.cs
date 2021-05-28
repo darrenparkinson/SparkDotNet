@@ -8,7 +8,7 @@ namespace SparkDotNet
     public partial class Spark
     {
 
-        private string eventsBase = "/v1/events";
+        private readonly string eventsBase = "/v1/events";
 
         /// <summary>
         /// List events in your organization. Several query parameters are available to filter the response.
